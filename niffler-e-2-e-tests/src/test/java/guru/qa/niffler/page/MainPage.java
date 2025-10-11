@@ -10,14 +10,6 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class MainPage {
     private final ElementsCollection tableRows = $$("#spendings tr");
-    private final SelenideElement spendings = $("#spendings");
-    private final SelenideElement statistics = $("#stat");
-    private final SelenideElement personIcon = $("[data-testid='PersonIcon']");
-    private final SelenideElement profileLink = $("a[href='/profile']");
-    private final SelenideElement friendsLink = $("a[href='/people/friends']");
-    private final SelenideElement allPeopleLink = $("a[href='/people/all']");
-
-
     private final SelenideElement spendingTable = $("#spendings"),
             menuBtn = $("button[aria-label='Menu']"),
             menu = $("ul[role='menu']");
