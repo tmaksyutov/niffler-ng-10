@@ -29,19 +29,19 @@ public class ProfilePage {
         return this;
     }
 
-    @Step("Check category: '{category}'")
+    @Step("Check category is displayed: '{category}'")
     public ProfilePage checkCategoryIsDisplayed(String category) {
         categories.find(text(category)).shouldBe(visible);
         return this;
     }
 
-    @Step("Check category: '{category}'")
-    public boolean checkCategoryIsNotDisplayed(String category) {
+    @Step("Check category is not displayed : '{category}'")
+    public ProfilePage checkCategoryIsNotDisplayed(String category) {
         categories.find(text(category)).shouldNot(visible);
-        return true;
+        return this;
     }
 
-    @Step("Check archived category: '{category}'")
+    @Step("Check exist archived category: '{category}'")
     public ProfilePage checkArchivedCategoryExists(String category) {
         archivedSwitcher.click();
         categoriesArchived.find(text(category)).shouldBe(visible);

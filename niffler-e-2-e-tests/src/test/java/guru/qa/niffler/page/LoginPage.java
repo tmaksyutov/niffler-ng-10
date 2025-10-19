@@ -22,10 +22,10 @@ public class LoginPage {
         return new MainPage();
     }
 
-    @Step("Login with username: '{username}' and wrong password: '{password}'")
-    public LoginPage loginWithBadCredentials(String username, String wrongPassword) {
+    @Step("Login with username: '{username}' and incorrect password: '{password}'")
+    public LoginPage loginWithBadCredentials(String username, String incorrectPassword) {
         usernameInput.val(username);
-        passwordInput.val(wrongPassword);
+        passwordInput.val(incorrectPassword);
         submitBtn.click();
         return this;
     }

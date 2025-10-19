@@ -54,7 +54,7 @@ public class RegistrationPage {
                 .submitSuccessRegistration();
     }
 
-    @Step("Get error message: '{message}'")
+    @Step("Check error message: '{message}'")
     public RegistrationPage checkErrorMessageIsVisible(String message) {
         errorLabel.shouldHave(visible).shouldHave(text(message));
         return this;

@@ -14,7 +14,7 @@ public class MainPage {
             menuBtn = $("button[aria-label='Menu']"),
             menu = $("ul[role='menu']");
 
-    public final ElementsCollection menuItems = menu.$$("li");
+    private final ElementsCollection menuItems = menu.$$("li");
 
     public ProfilePage goToProfilePage() {
         menuBtn.click();
