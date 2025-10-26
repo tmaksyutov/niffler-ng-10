@@ -10,7 +10,11 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class MainPage {
     private final ElementsCollection tableRows = $$("#spendings tr");
-    private final SelenideElement spendingTable = $("#spendings"),
+    private final SelenideElement
+            personIcon = $("[data-testid='PersonIcon']"),
+            friendsLink = $("a[href='/people/friends']"),
+            allPeopleLink = $("a[href='/people/all']"),
+            spendingTable = $("#spendings"),
             menuBtn = $("button[aria-label='Menu']"),
             menu = $("ul[role='menu']");
 
@@ -36,5 +40,17 @@ public class MainPage {
         spendingTable.shouldBe(visible);
         menuBtn.shouldBe(visible);
         return this;
+    }
+
+    public AllPeoplePage goToAllPeoplePage() {
+        personIcon.click();
+        allPeopleLink.click();
+        return new AllPeoplePage();
+    }
+
+    public FriendsPage goToFriendsPage() {
+        personIcon.click();
+        friendsLink.click();
+        return new FriendsPage();
     }
 }
