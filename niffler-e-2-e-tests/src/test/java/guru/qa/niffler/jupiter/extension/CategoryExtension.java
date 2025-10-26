@@ -18,17 +18,17 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
                 context.getRequiredTestMethod(),
                 User.class
         ).ifPresent(
-                anno -> {
-                    if (anno.categories().length > 0) {
+                annotation -> {
+                    if (annotation.categories().length > 0) {
                         CategoryJson created = spendClient.createCategory(
                                 new CategoryJson(
                                         null,
                                         RandomDataUtils.randomCategoryName(),
-                                        anno.username(),
+                                        annotation.username(),
                                         false
                                 )
                         );
-                        if (anno.categories()[0].archived()) created = spendClient.updateCategory(
+                        if (annotation.categories()[0].archived()) created = spendClient.updateCategory(
                                 new CategoryJson(
                                         created.id(),
                                         created.name(),
