@@ -1,12 +1,26 @@
 package guru.qa.niffler.config;
 
-
 enum LocalConfig implements Config {
     INSTANCE;
 
     @Override
     public String frontUrl() {
         return "http://localhost:3000/";
+    }
+
+    @Override
+    public String authUrl() {
+        return "http://localhost:9000/";
+    }
+
+    @Override
+    public String gatewayUrl() {
+        return "http://localhost:8090/";
+    }
+
+    @Override
+    public String userdataUrl() {
+        return "http://localhost:8089/";
     }
 
     @Override
