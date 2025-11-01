@@ -1,6 +1,5 @@
 package guru.qa.niffler.config;
 
-
 public interface Config {
 
     static Config getInstance() {
@@ -8,6 +7,12 @@ public interface Config {
     }
 
     String frontUrl();
+
+    String authUrl();
+
+    String gatewayUrl();
+
+    String userdataUrl();
 
     String spendUrl();
 

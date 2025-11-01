@@ -9,8 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static guru.qa.niffler.utils.DataUtils.getRandomPassword;
-import static guru.qa.niffler.utils.DataUtils.getRandomUserName;
+import static guru.qa.niffler.utils.RandomDataUtils.randomPassword;
+import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
 
 @ExtendWith(BrowserExtension.class)
 public class RegistrationTest {
@@ -29,15 +29,15 @@ public class RegistrationTest {
         loginPage
                 .goToRegistrationPage()
                 .checkRegistrationPageIsLoaded()
-                .fillAndSubmitSuccessRegistration(getRandomUserName(), getRandomPassword())
+                .fillAndSubmitSuccessRegistration(randomUsername(), randomPassword())
                 .checkLoginPageIsLoaded();
     }
 
     @Test
     @DisplayName("Ошибка регистрации существующего пользователя")
     void shouldNotRegisterUserWithExistingUsername() {
-        String username = getRandomUserName();
-        String password = getRandomPassword();
+        String username = randomUsername();
+        String password = randomPassword();
         String errorMessage = "Username `" + username + "` already exists";
 
         loginPage
@@ -56,9 +56,9 @@ public class RegistrationTest {
     @Test
     @DisplayName("Ошибка при несовпадении пароля и подтверждения")
     void shouldShowErrorIfPasswordAndConfirmPasswordAreNotEqual() {
-        String username = getRandomUserName();
-        String password = getRandomPassword();
-        String wrongConfirmPassword = getRandomPassword();
+        String username = randomUsername();
+        String password = randomPassword();
+        String wrongConfirmPassword = randomPassword();
         String errorMessage = "Passwords should be equal";
 
         loginPage
@@ -75,8 +75,8 @@ public class RegistrationTest {
     @Test
     @DisplayName("Успешный логин существующего пользователя")
     void mainPageShouldBeDisplayedAfterSuccessLogin() {
-        String username = getRandomUserName();
-        String password = getRandomPassword();
+        String username = randomUsername();
+        String password = randomPassword();
         loginPage
                 .goToRegistrationPage()
                 .checkRegistrationPageIsLoaded()
@@ -88,9 +88,9 @@ public class RegistrationTest {
     @Test
     @DisplayName("Ошибка при логине с некорректными данными")
     void userShouldStayOnLoginPageAfterLoginWithBadCredentials() {
-        String username = getRandomUserName();
-        String correctPassword = getRandomPassword();
-        String wrongPassword = getRandomPassword();
+        String username = randomUsername();
+        String correctPassword = randomPassword();
+        String wrongPassword = randomPassword();
         loginPage
                 .goToRegistrationPage()
                 .checkRegistrationPageIsLoaded()

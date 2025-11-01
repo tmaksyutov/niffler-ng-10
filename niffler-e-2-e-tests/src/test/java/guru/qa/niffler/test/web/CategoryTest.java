@@ -3,6 +3,7 @@ package guru.qa.niffler.test.web;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.Category;
+import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.WebTest;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.page.LoginPage;
@@ -20,7 +21,8 @@ public class CategoryTest {
         loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
     }
 
-    @Category(username = "tmaksyutov")
+    @User(username = "tmaksyutov",
+            categories = {@Category()})
     @Test
     void activeCategoryShouldPresentInCategoryList(CategoryJson category) {
         loginPage
@@ -30,10 +32,8 @@ public class CategoryTest {
                 .checkCategoryIsDisplayed(category.name());
     }
 
-    @Category(
-            username = "tmaksyutov",
-            archived = true
-    )
+    @User(username = "tmaksyutov",
+            categories = {@Category(archived = true)})
     @Test
     void archivedCategoryShouldNotBePresentedInActiveCategoryList(CategoryJson category) {
         loginPage
@@ -43,10 +43,8 @@ public class CategoryTest {
                 .checkCategoryIsNotDisplayed(category.name());
     }
 
-    @Category(
-            username = "tmaksyutov",
-            archived = true
-    )
+    @User(username = "tmaksyutov",
+            categories = {@Category(archived = true)})
     @Test
     void archivedCategoryShouldBePresentedInArchivedList(CategoryJson category) {
         loginPage
