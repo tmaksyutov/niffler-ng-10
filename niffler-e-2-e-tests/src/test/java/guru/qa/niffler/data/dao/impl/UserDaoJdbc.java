@@ -14,7 +14,7 @@ public class UserDaoJdbc implements UserDao {
     private static final Config CFG = Config.getInstance();
 
     @Override
-    public UserEntity createUser(UserEntity user) {
+    public UserEntity create(UserEntity user) {
         try (Connection connection = Databases.connection(CFG.userdataJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO user (currency, firstname, full_name, photo, photo_small, surname, username) " +

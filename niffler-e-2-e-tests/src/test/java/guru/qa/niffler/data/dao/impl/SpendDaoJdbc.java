@@ -51,7 +51,7 @@ public class SpendDaoJdbc implements SpendDao {
     }
 
     @Override
-    public Optional<SpendEntity> findSpendById(UUID id) {
+    public Optional<SpendEntity> findById(UUID id) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
                     "SELECT * FROM spend WHERE id = ?"
@@ -93,7 +93,7 @@ public class SpendDaoJdbc implements SpendDao {
     }
 
     @Override
-    public void deleteSpend(SpendEntity spend) {
+    public void delete(SpendEntity spend) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl());
              PreparedStatement ps = connection.prepareStatement(
                      "DELETE FROM spend WHERE id = ?"
@@ -113,16 +113,9 @@ public class SpendDaoJdbc implements SpendDao {
         spendEntity.setDescription(rs.getString("description"));
         spendEntity.setSpendDate(rs.getDate("spend_date"));
         spendEntity.setAmount(rs.getDouble("amount"));
-
-        UUID categoryId = rs.getObject("category_id", UUID.class);
-        if (categoryId != null) {
-            CategoryDaoJdbc categoryDao = new CategoryDaoJdbc();
-            CategoryEntity category = categoryDao.findCategoryById(categoryId)
-                    .orElseThrow(() -> new IllegalStateException(
-                            "Category not found for id: " + categoryId
-                    ));
-            spendEntity.setCategory(category);
-        }
+        CategoryEntity category = new CategoryEntity();
+        category.setId(rs.getObject("category_id", UUID.class));
+        spendEntity.setCategory(category);
         return spendEntity;
     }
 }

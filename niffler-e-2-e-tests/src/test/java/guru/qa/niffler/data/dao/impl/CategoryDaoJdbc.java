@@ -46,7 +46,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     }
 
     @Override
-    public Optional<CategoryEntity> findCategoryById(UUID id) {
+    public Optional<CategoryEntity> findById(UUID id) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
                     "SELECT * FROM category WHERE id = ?"
@@ -79,7 +79,7 @@ public class CategoryDaoJdbc implements CategoryDao {
 
                 int count = ps.executeUpdate();
                 if (count == 0) throw new SQLException("Can`t find category by id");
-                return findCategoryById(categoryEntity.getId())
+                return findById(categoryEntity.getId())
                         .orElseThrow(() -> new SQLException("Can`t find updated category"));
             }
         } catch (SQLException e) {
@@ -88,7 +88,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     }
 
     @Override
-    public Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
+    public Optional<CategoryEntity> findByUsernameAndCategoryName(String username, String categoryName) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
                     "SELECT * FROM category " +
@@ -133,7 +133,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     }
 
     @Override
-    public void deleteCategory(CategoryEntity category) {
+    public void delete(CategoryEntity category) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl());
              PreparedStatement ps = connection.prepareStatement(
                      "DELETE FROM category WHERE id = ?"

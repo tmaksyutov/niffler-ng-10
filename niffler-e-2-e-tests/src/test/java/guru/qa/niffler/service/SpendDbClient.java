@@ -51,7 +51,7 @@ public class SpendDbClient implements SpendClient {
 
     @Override
     public Optional<CategoryJson> findCategoryByNameAndUsername(String categoryName, String username) {
-        return categoryDao.findCategoryByUsernameAndCategoryName(username, categoryName)
+        return categoryDao.findByUsernameAndCategoryName(username, categoryName)
                 .map(entity -> CategoryJson.fromEntity(entity));
     }
 }
