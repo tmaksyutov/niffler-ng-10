@@ -20,17 +20,17 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
 
     @Override
     public void create(AuthorityEntity... authorities) {
-        try (PreparedStatement statement = connection.prepareStatement(
+        try (PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO authority (user_id, authority) VALUES (?, ?)",
                 Statement.RETURN_GENERATED_KEYS
         )) {
             for (AuthorityEntity authority : authorities) {
-                statement.setObject(1, authority.getUser().getId());
-                statement.setString(2, authority.getAuthority().name());
-                statement.addBatch();
-                statement.clearParameters();
+                ps.setObject(1, authority.getUser().getId());
+                ps.setString(2, authority.getAuthority().name());
+                ps.addBatch();
+                ps.clearParameters();
             }
-            statement.executeBatch();
+            ps.executeBatch();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -68,6 +68,24 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
                 } else {
                     return Optional.empty();
                 }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<AuthorityEntity> findAll() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM authority"
+        )) {
+            ps.execute();
+            try (ResultSet rs = ps.getResultSet()) {
+                List<AuthorityEntity> authorities = new ArrayList<>();
+                while (rs.next()) {
+                    authorities.add(getAuthority(rs));
+                }
+                return authorities;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
