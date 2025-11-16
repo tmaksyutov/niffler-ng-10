@@ -6,6 +6,7 @@ import guru.qa.niffler.data.dao.impl.AuthAuthorityDaoJdbc;
 import guru.qa.niffler.data.dao.impl.AuthUserDaoJdbc;
 import guru.qa.niffler.data.dao.impl.UserDaoJdbc;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
+import guru.qa.niffler.data.entity.auth.Authority;
 import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 
 import guru.qa.niffler.data.entity.user.UserEntity;
@@ -31,7 +32,7 @@ public class TransactionTest {
         authUserEntity.setPassword("12345");
 
         AuthorityEntity authority = new AuthorityEntity();
-        authority.setAuthority("read");
+        authority.setAuthority(Authority.read);
         UserEntity userData = new UserEntity();
         userData.setFullname("Testov Test Testovich");
         userData.setFirstname("Test");
@@ -68,7 +69,7 @@ public class TransactionTest {
         userAuthEntity.setPassword("12345");
 
         AuthorityEntity authority = new AuthorityEntity();
-        authority.setAuthority("read");
+        authority.setAuthority(Authority.read);
 
         UserEntity userData = new UserEntity();
         userData.setFullname("Testov Test Testovich");
