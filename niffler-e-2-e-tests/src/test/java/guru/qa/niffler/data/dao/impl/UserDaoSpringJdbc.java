@@ -59,7 +59,7 @@ public class UserDaoSpringJdbc implements UserDao {
 
     @Override
     public Optional<UserEntity> findByUsername(String username) {
-        return Optional.empty();
+        throw new RuntimeException("User with username '" + username + "' not found");
     }
 
     @Override

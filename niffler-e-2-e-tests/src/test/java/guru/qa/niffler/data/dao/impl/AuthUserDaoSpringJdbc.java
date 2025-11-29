@@ -47,7 +47,7 @@ public class AuthUserDaoSpringJdbc implements AuthUserDao {
 
     @Override
     public AuthUserEntity update(AuthUserEntity user) {
-        return null;
+        throw new RuntimeException("Update operation not supported");
     }
 
     @Override
@@ -64,7 +64,7 @@ public class AuthUserDaoSpringJdbc implements AuthUserDao {
 
     @Override
     public Optional<AuthUserEntity> findByUsername(String username) {
-        return Optional.empty();
+        throw new RuntimeException("User with username '" + username + "' not found");
     }
 
     @Override

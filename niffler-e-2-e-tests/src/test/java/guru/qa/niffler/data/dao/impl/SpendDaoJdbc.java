@@ -95,7 +95,7 @@ public class SpendDaoJdbc implements SpendDao {
     public List<SpendEntity> findAll() {
         List<SpendEntity> spends = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM spend WHERE username"
+                "SELECT * FROM spend"
         )) {
             ps.execute();
             try (ResultSet rs = ps.getResultSet()) {

@@ -45,12 +45,12 @@ public class AuthAuthorityDaoSpringJdbc implements AuthAuthorityDao {
 
     @Override
     public List<AuthorityEntity> findByUserId(UUID id) {
-        return List.of();
+        throw new RuntimeException("Authorities for user with id " + id + " not found");
     }
 
     @Override
     public Optional<AuthorityEntity> findById(UUID id) {
-        return Optional.empty();
+        throw new RuntimeException("AuthorityEntity with id " + id + " not found");
     }
 
     @Override
