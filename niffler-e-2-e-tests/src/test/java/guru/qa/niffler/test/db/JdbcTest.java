@@ -20,7 +20,7 @@ public class JdbcTest {
         UserJson user = userDbClient.create(
                 new UserJson(
                         null,
-                        "valentino-1",
+                        "valentino-8",
                         null,
                         null,
                         null,
@@ -40,8 +40,8 @@ public class JdbcTest {
         CategoryJson category = spendDbClient.createCategory(
                 new CategoryJson(
                         null,
-                        "Test category-1",
-                        "username-1",
+                        "Test category-3",
+                        "username-3",
                         false
                 )
         );
@@ -55,8 +55,8 @@ public class JdbcTest {
                         category,
                         CurrencyValues.USD,
                         100.50,
-                        "Test spend-1",
-                        "username-1"
+                        "Test spend-3",
+                        "username-3"
                 )
         );
         System.out.println(spend);
