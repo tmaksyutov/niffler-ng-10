@@ -5,14 +5,14 @@ import guru.qa.niffler.data.entity.user.FriendshipEntity;
 import guru.qa.niffler.data.entity.user.FriendshipStatus;
 import guru.qa.niffler.data.entity.user.UserEntity;
 import guru.qa.niffler.data.repository.UserRepository;
-import guru.qa.niffler.model.CurrencyValues;
+
+import guru.qa.niffler.data.mapper.UserSetExtractor;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static guru.qa.niffler.data.tpl.Connections.holder;
 
@@ -55,20 +55,17 @@ public class UserRepositoryJdbc implements UserRepository {
     public Optional<UserEntity> findById(UUID id) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM \"user\" u " +
-                        "JOIN friendship fr " +
+                        "LEFT JOIN friendship fr " +
                         "ON u.id = fr.requester_id " +
-                        "JOIN friendship fa " +
+                        "LEFT JOIN friendship fa " +
                         "ON u.id = fa.addressee_id " +
                         "WHERE u.id = ?"
         )) {
             ps.setObject(1, id);
             ps.execute();
             try (ResultSet rs = ps.getResultSet()) {
-                if (rs.next()) {
-                    return Optional.of(getUser(rs));
-                } else {
-                    return Optional.empty();
-                }
+                UserEntity user = UserSetExtractor.instance.extractData(rs);
+                return Optional.ofNullable(user);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -80,20 +77,17 @@ public class UserRepositoryJdbc implements UserRepository {
     public Optional<UserEntity> findByUsername(String username) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM \"user\" u " +
-                        "JOIN friendship fr " +
+                        "LEFT JOIN friendship fr " +
                         "ON u.id = fr.requester_id " +
-                        "JOIN friendship fa " +
+                        "LEFT JOIN friendship fa " +
                         "ON u.id = fa.addressee_id " +
                         "WHERE u.username = ?"
         )) {
             ps.setObject(1, username);
             ps.execute();
             try (ResultSet rs = ps.getResultSet()) {
-                if (rs.next()) {
-                    return Optional.of(getUser(rs));
-                } else {
-                    return Optional.empty();
-                }
+                UserEntity user = UserSetExtractor.instance.extractData(rs);
+                return Optional.ofNullable(user);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -129,44 +123,6 @@ public class UserRepositoryJdbc implements UserRepository {
         }
     }
 
-    @Override
-    public List<UserEntity> findAll() {
-        List<UserEntity> users = new ArrayList<>();
-
-        try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
-
-                "SELECT * FROM \"user\""
-        )) {
-            ps.execute();
-            try (ResultSet rs = ps.getResultSet()) {
-                while (rs.next()) {
-                    users.add(getUser(rs));
-                }
-                return users;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void delete(UserEntity user) {
-        try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
-                "DELETE FROM \"user\" WHERE id = ?");
-             PreparedStatement friendshipPs = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
-                     "DELETE FROM friendship WHERE requester_id = ? " +
-                             "OR addressee_id  = ?");
-        ) {
-            friendshipPs.setObject(1, user.getId());
-            friendshipPs.setObject(2, user.getId());
-            friendshipPs.executeUpdate();
-            ps.setObject(1, user.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-    }
-
     public List<FriendshipEntity> getFriendshipRequests(UserEntity user) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM friendship WHERE requester_id = ?"
@@ -194,58 +150,6 @@ public class UserRepositoryJdbc implements UserRepository {
             throw new RuntimeException(e);
         }
     }
-
-    private UserEntity getUser(ResultSet rs) throws SQLException {
-        Map<UUID, UserEntity> users = new ConcurrentHashMap<>();
-        UserEntity user = null;
-
-        while (rs.next()) {
-            UUID userId = rs.getObject("id", UUID.class);
-
-            user = users.computeIfAbsent(userId, id -> {
-                UserEntity result = new UserEntity();
-                try {
-                    result.setId(rs.getObject("id", UUID.class));
-                    result.setUsername(rs.getString("username"));
-                    result.setCurrency(CurrencyValues.valueOf(rs.getString("u.currency")));
-                    result.setFirstname(rs.getString("firstname"));
-                    result.setSurname(rs.getString("surname"));
-                    result.setFullname(rs.getString("full_name"));
-                    result.setPhoto(rs.getBytes("photo"));
-                    result.setPhotoSmall(rs.getBytes("photo_small"));
-                    return result;
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            List<FriendshipEntity> friendshipRequests = user.getFriendshipRequests();
-            List<FriendshipEntity> friendshipAddressee = user.getFriendshipAddressees();
-            FriendshipEntity friendship = new FriendshipEntity();
-            UserEntity requester = new UserEntity();
-            UserEntity addressee = new UserEntity();
-            UUID requesterId = rs.getObject("requester_id", UUID.class);
-            UUID addresseeId = rs.getObject("addressee_id", UUID.class);
-            FriendshipStatus status = FriendshipStatus.valueOf(rs.getString("status"));
-
-            if (requesterId != null) {
-                requester.setId(requesterId);
-                friendship.setRequester(requester);
-            }
-            if (addresseeId != null) {
-                addressee.setId(addresseeId);
-                friendship.setAddressee(addressee);
-            }
-            if (status != null) friendship.setStatus(status);
-
-            if (requesterId.equals(userId)) friendshipRequests.add(friendship);
-            if (addresseeId.equals(userId)) friendshipAddressee.add(friendship);
-
-            user.setFriendshipRequests(friendshipRequests);
-            user.setFriendshipAddressees(friendshipAddressee);
-        }
-        return user;
-    }
-
 
     private FriendshipEntity getFriendship(ResultSet rs) throws SQLException {
         FriendshipEntity friendship = new FriendshipEntity();

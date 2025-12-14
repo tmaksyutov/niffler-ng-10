@@ -5,7 +5,6 @@ import guru.qa.niffler.data.entity.user.FriendshipEntity;
 import guru.qa.niffler.data.entity.user.FriendshipStatus;
 import guru.qa.niffler.data.entity.user.UserEntity;
 import guru.qa.niffler.data.mapper.FriendshipEntityRowMapper;
-import guru.qa.niffler.data.mapper.UserEntityRowMapper;
 import guru.qa.niffler.data.mapper.UserSetExtractor;
 import guru.qa.niffler.data.repository.UserRepository;
 import guru.qa.niffler.data.tpl.DataSources;
@@ -82,9 +81,9 @@ public class UserRepositorySpringJdbc implements UserRepository {
         return Optional.ofNullable(
                 jdbcTemplate.query(
                         "SELECT * FROM \"user\" u " +
-                                "JOIN friendship fr " +
+                                "LEFT JOIN friendship fr " +
                                 "ON u.id = fr.requester_id " +
-                                "JOIN friendship fa " +
+                                "LEFT JOIN friendship fa " +
                                 "ON u.id = fa.addressee_id " +
                                 "WHERE u.id = ?",
                         UserSetExtractor.instance,
@@ -97,9 +96,9 @@ public class UserRepositorySpringJdbc implements UserRepository {
         return Optional.ofNullable(
                 jdbcTemplate.query(
                         "SELECT * FROM \"user\" u " +
-                                "JOIN friendship fr " +
+                                "LEFT JOIN friendship fr " +
                                 "ON u.id = fr.requester_id " +
-                                "JOIN friendship fa " +
+                                "LEFT JOIN friendship fa " +
                                 "ON u.id = fa.addressee_id " +
                                 "WHERE u.username = ?",
                         UserSetExtractor.instance,
@@ -115,34 +114,6 @@ public class UserRepositorySpringJdbc implements UserRepository {
     public void addFriend(UserEntity requester, UserEntity addressee) {
         createFriendshipRow(requester, addressee, FriendshipStatus.ACCEPTED);
         createFriendshipRow(addressee, requester, FriendshipStatus.ACCEPTED);
-    }
-
-    @Override
-    public List<UserEntity> findAll() {
-
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
-
-        return jdbcTemplate.query(
-                "SELECT * FROM \"user\"",
-                UserEntityRowMapper.instance
-        );
-    }
-
-    @Override
-    public void delete(UserEntity user) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
-        jdbcTemplate.update(con -> {
-            PreparedStatement userPs = con.prepareStatement(
-                    "DELETE FROM \"user\" WHERE id = ?");
-            PreparedStatement friendshipPs = con.prepareStatement(
-                    "DELETE FROM friendship WHERE requester_id = ? " +
-                            "OR addressee_id  = ?");
-            userPs.setObject(1, user.getId());
-            friendshipPs.setObject(1, user.getId());
-            friendshipPs.setObject(2, user.getId());
-            friendshipPs.executeUpdate();
-            return userPs;
-        });
     }
 
     public List<FriendshipEntity> getFriendshipRequests(UserEntity user) {

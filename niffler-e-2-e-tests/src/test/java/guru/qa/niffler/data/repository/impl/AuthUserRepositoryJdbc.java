@@ -80,7 +80,7 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
 
                     AuthorityEntity ae = new AuthorityEntity();
                     ae.setUser(user);
-                    ae.setId(rs.getObject("a.id", UUID.class));
+                    ae.setId(rs.getObject("id", UUID.class));
                     ae.setAuthority(Authority.valueOf(rs.getString("authority")));
                     authorityEntities.add(ae);
                 }
@@ -115,7 +115,7 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
 
                     AuthorityEntity ae = new AuthorityEntity();
                     ae.setUser(user);
-                    ae.setId(rs.getObject("a.id", UUID.class));
+                    ae.setId(rs.getObject("id", UUID.class));
                     ae.setAuthority(Authority.valueOf(rs.getString("authority")));
                     authorityEntities.add(ae);
                 }

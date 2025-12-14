@@ -29,8 +29,8 @@ public class ChainedTxManagerTest {
     private ChainedTransactionManager chainedTxManager;
     private TransactionTemplate txTemplate;
 
-    private AuthUserRepositoryJdbc authUserDao;
-    private UserRepositoryJdbc userDao;
+    private AuthUserRepositoryJdbc authUserRepository;
+    private UserRepositoryJdbc userRepository;
     private AuthAuthorityDaoJdbc authAuthorityDao;
 
     @BeforeEach
@@ -44,8 +44,8 @@ public class ChainedTxManagerTest {
         chainedTxManager = new ChainedTransactionManager(authManager, userManager);
         txTemplate = new TransactionTemplate(chainedTxManager);
 
-        authUserDao = new AuthUserRepositoryJdbc();
-        userDao = new UserRepositoryJdbc();
+        authUserRepository = new AuthUserRepositoryJdbc();
+        userRepository = new UserRepositoryJdbc();
         authAuthorityDao = new AuthAuthorityDaoJdbc();
     }
 
@@ -89,10 +89,10 @@ public class ChainedTxManagerTest {
             try (Connection authConn = authManager.getDataSource().getConnection();
                  Connection userConn = userManager.getDataSource().getConnection()) {
 
-                authUserDao.create(authUser);
+                authUserRepository.create(authUser);
                 System.out.println("Создали юзера в auth: " + authUser.getUsername());
 
-                userDao.create(userData);
+                userRepository.create(userData);
                 System.out.println("Создали юзера в userdata");
 
                 authAuthorityDao.create(authority);
@@ -122,10 +122,10 @@ public class ChainedTxManagerTest {
                     try (Connection authConn = authManager.getDataSource().getConnection();
                          Connection userConn = userManager.getDataSource().getConnection()) {
 
-                        authUserDao.create(authUser);
+                        authUserRepository.create(authUser);
                         System.out.println("Создали юзера в auth: " + authUser.getUsername());
 
-                        userDao.create(userData);
+                        userRepository.create(userData);
                         System.out.println("Создали юзера в userdata");
 
                         // Эта операция должна упасть с ошибкой
@@ -153,10 +153,10 @@ public class ChainedTxManagerTest {
                     try (Connection authConn = authManager.getDataSource().getConnection();
                          Connection userConn = userManager.getDataSource().getConnection()) {
 
-                        authUserDao.create(authUser);
+                        authUserRepository.create(authUser);
                         System.out.println("Создали юзера в auth: " + authUser.getUsername());
 
-                        userDao.create(userData);
+                        userRepository.create(userData);
                         System.out.println("Создали юзера в userdata");
 
                         // Искусственно вызываем исключение после успешных операций

@@ -69,8 +69,8 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
         return Optional.ofNullable(
                 jdbcTemplate.query(
                         " SELECT a.id as authority_id, " +
-                                "                          authority, " +
-                                "                          user_id as id, " +
+                                "                          a.authority, " +
+                                "                          a.user_id as id, " +
                                 "                          u.username, " +
                                 "                          u.password, " +
                                 "                          u.enabled, " +
@@ -88,8 +88,8 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
         return Optional.ofNullable(
                 jdbcTemplate.query(
                         " SELECT a.id as authority_id, " +
-                                "                          authority, " +
-                                "                          user_id as id, " +
+                                "                          a.authority, " +
+                                "                          a.user_id as id, " +
                                 "                          u.username, " +
                                 "                          u.password, " +
                                 "                          u.enabled, " +
