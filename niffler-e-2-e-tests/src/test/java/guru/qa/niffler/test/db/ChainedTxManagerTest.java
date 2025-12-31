@@ -6,6 +6,8 @@ import guru.qa.niffler.data.entity.auth.Authority;
 import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 import guru.qa.niffler.data.entity.user.UserEntity;
+import guru.qa.niffler.data.repository.impl.AuthUserRepositoryJdbc;
+import guru.qa.niffler.data.repository.impl.UserRepositoryJdbc;
 import guru.qa.niffler.data.tpl.DataSources;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.utils.RandomDataUtils;
@@ -27,8 +29,8 @@ public class ChainedTxManagerTest {
     private ChainedTransactionManager chainedTxManager;
     private TransactionTemplate txTemplate;
 
-    private AuthUserDaoJdbc authUserDao;
-    private UserDaoJdbc userDao;
+    private AuthUserRepositoryJdbc authUserRepository;
+    private UserRepositoryJdbc userRepository;
     private AuthAuthorityDaoJdbc authAuthorityDao;
 
     @BeforeEach
@@ -42,8 +44,8 @@ public class ChainedTxManagerTest {
         chainedTxManager = new ChainedTransactionManager(authManager, userManager);
         txTemplate = new TransactionTemplate(chainedTxManager);
 
-        authUserDao = new AuthUserDaoJdbc();
-        userDao = new UserDaoJdbc();
+        authUserRepository = new AuthUserRepositoryJdbc();
+        userRepository = new UserRepositoryJdbc();
         authAuthorityDao = new AuthAuthorityDaoJdbc();
     }
 
@@ -87,10 +89,10 @@ public class ChainedTxManagerTest {
             try (Connection authConn = authManager.getDataSource().getConnection();
                  Connection userConn = userManager.getDataSource().getConnection()) {
 
-                authUserDao.create(authUser);
+                authUserRepository.create(authUser);
                 System.out.println("Создали юзера в auth: " + authUser.getUsername());
 
-                userDao.create(userData);
+                userRepository.create(userData);
                 System.out.println("Создали юзера в userdata");
 
                 authAuthorityDao.create(authority);
@@ -120,10 +122,10 @@ public class ChainedTxManagerTest {
                     try (Connection authConn = authManager.getDataSource().getConnection();
                          Connection userConn = userManager.getDataSource().getConnection()) {
 
-                        authUserDao.create(authUser);
+                        authUserRepository.create(authUser);
                         System.out.println("Создали юзера в auth: " + authUser.getUsername());
 
-                        userDao.create(userData);
+                        userRepository.create(userData);
                         System.out.println("Создали юзера в userdata");
 
                         // Эта операция должна упасть с ошибкой
@@ -151,10 +153,10 @@ public class ChainedTxManagerTest {
                     try (Connection authConn = authManager.getDataSource().getConnection();
                          Connection userConn = userManager.getDataSource().getConnection()) {
 
-                        authUserDao.create(authUser);
+                        authUserRepository.create(authUser);
                         System.out.println("Создали юзера в auth: " + authUser.getUsername());
 
-                        userDao.create(userData);
+                        userRepository.create(userData);
                         System.out.println("Создали юзера в userdata");
 
                         // Искусственно вызываем исключение после успешных операций
