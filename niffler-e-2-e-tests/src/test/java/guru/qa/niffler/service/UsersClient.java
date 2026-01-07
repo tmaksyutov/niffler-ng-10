@@ -4,5 +4,11 @@ import guru.qa.niffler.model.UserJson;
 
 public interface UsersClient {
 
-    UserJson create(UserJson user);
+    UserJson createUser(String username, String password);
+
+    void createIncomeInvitation(UserJson targetUser, int count);
+
+    void createOutcomeInvitation(UserJson targetUser, int count);
+
+    void createFriends(UserJson targetUser, int count);
 }

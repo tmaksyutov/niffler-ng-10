@@ -1,64 +1,44 @@
 package guru.qa.niffler.test.db;
 
 import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.model.CurrencyValues;
-import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.service.SpendDbClient;
 import guru.qa.niffler.service.UsersDbClient;
 
-import java.sql.Date;
-import java.util.Calendar;
-
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class JdbcTest {
 
-    @Test
-    void createUserTest() {
-        UsersDbClient userDbClient = new UsersDbClient();
-        UserJson user = userDbClient.create(
-                new UserJson(
-                        null,
-                        "valentino-8",
-                        null,
-                        null,
-                        null,
-                        CurrencyValues.RUB,
-                        null,
-                        null
-                )
+
+    static UsersDbClient usersDbClient = new UsersDbClient();
+
+    @ValueSource(strings = {
+            "valentin-31"
+    })
+    @ParameterizedTest
+    void springJdbcTest(String uname) {
+        UserJson user = usersDbClient.createUser(
+                uname,
+                "12345"
         );
-        System.out.println(user);
+        usersDbClient.createIncomeInvitation(user, 1);
+        usersDbClient.createOutcomeInvitation(user, 1);
     }
 
     @Test
-    void createCategoryAndSpendTest() {
+    void createCategoryTest() {
         SpendDbClient spendDbClient = new SpendDbClient();
 
-        // Создаем категорию
         CategoryJson category = spendDbClient.createCategory(
                 new CategoryJson(
                         null,
-                        "Test category-3",
-                        "username-3",
+                        "Test category-13",
+                        "username-13",
                         false
                 )
         );
         System.out.println(category);
-
-        // Создаем трату по категории
-        SpendJson spend = spendDbClient.createSpend(
-                new SpendJson(
-                        null,
-                        new Date(Calendar.getInstance().getTime().getTime()),
-                        category,
-                        CurrencyValues.USD,
-                        100.50,
-                        "Test spend-3",
-                        "username-3"
-                )
-        );
-        System.out.println(spend);
     }
 }

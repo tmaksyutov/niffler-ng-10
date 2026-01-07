@@ -7,7 +7,7 @@ import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 import guru.qa.niffler.data.entity.user.UserEntity;
 import guru.qa.niffler.data.repository.impl.AuthUserRepositoryJdbc;
-import guru.qa.niffler.data.repository.impl.UserRepositoryJdbc;
+import guru.qa.niffler.data.repository.impl.UserdataUserRepositoryJdbc;
 import guru.qa.niffler.data.tpl.DataSources;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.utils.RandomDataUtils;
@@ -30,7 +30,7 @@ public class ChainedTxManagerTest {
     private TransactionTemplate txTemplate;
 
     private AuthUserRepositoryJdbc authUserRepository;
-    private UserRepositoryJdbc userRepository;
+    private UserdataUserRepositoryJdbc userRepository;
     private AuthAuthorityDaoJdbc authAuthorityDao;
 
     @BeforeEach
@@ -45,7 +45,7 @@ public class ChainedTxManagerTest {
         txTemplate = new TransactionTemplate(chainedTxManager);
 
         authUserRepository = new AuthUserRepositoryJdbc();
-        userRepository = new UserRepositoryJdbc();
+        userRepository = new UserdataUserRepositoryJdbc();
         authAuthorityDao = new AuthAuthorityDaoJdbc();
     }
 

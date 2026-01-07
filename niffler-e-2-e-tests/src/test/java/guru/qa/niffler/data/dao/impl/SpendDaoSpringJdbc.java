@@ -44,6 +44,33 @@ public class SpendDaoSpringJdbc implements SpendDao {
     }
 
     @Override
+    public SpendEntity update(SpendEntity spend) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE spend " +
+                            "SET username = ? , " +
+                            "spend_date = ? , " +
+                            "currency = ? , " +
+                            "amount = ? , " +
+                            "description = ? , " +
+                            "category_id = ? " +
+                            "WHERE id = ?"
+            );
+            ps.setString(1, spend.getUsername());
+            ps.setDate(2, new java.sql.Date(spend.getSpendDate().getTime()));
+            ps.setString(3, spend.getCurrency().name());
+            ps.setDouble(4, spend.getAmount());
+            ps.setString(5, spend.getDescription());
+            ps.setObject(6, spend.getCategory().getId());
+            ps.setObject(7, spend.getId());
+
+            return ps;
+        });
+        return spend;
+    }
+
+    @Override
     public Optional<SpendEntity> findById(UUID id) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
         return Optional.ofNullable(
