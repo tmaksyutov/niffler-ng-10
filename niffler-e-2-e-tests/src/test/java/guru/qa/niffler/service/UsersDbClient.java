@@ -45,7 +45,7 @@ public class UsersDbClient implements UsersClient {
     }
 
     @Override
-    public void createIncomeInvitation(UserJson targetUser, int count) {
+    public void addIncomeInvitation(UserJson targetUser, int count) {
         if (count > 0) {
             UserEntity targetEntity = udUserRepository.findById(
                     targetUser.id()
@@ -57,7 +57,7 @@ public class UsersDbClient implements UsersClient {
                             AuthUserEntity authUser = authUserEntity(username, "12345");
                             authUserRepository.create(authUser);
                             UserEntity addressee = udUserRepository.create(userEntity(username));
-                            udUserRepository.sendInvitation(addressee, targetEntity);
+                            udUserRepository.addFriendshipRequest(addressee, targetEntity);
                             return null;
                         }
                 );
@@ -66,7 +66,7 @@ public class UsersDbClient implements UsersClient {
     }
 
     @Override
-    public void createOutcomeInvitation(UserJson targetUser, int count) {
+    public void addOutcomeInvitation(UserJson targetUser, int count) {
         if (count > 0) {
             UserEntity targetEntity = udUserRepository.findById(
                     targetUser.id()
@@ -78,7 +78,7 @@ public class UsersDbClient implements UsersClient {
                             AuthUserEntity authUser = authUserEntity(username, "12345");
                             authUserRepository.create(authUser);
                             UserEntity addressee = udUserRepository.create(userEntity(username));
-                            udUserRepository.sendInvitation(targetEntity, addressee);
+                            udUserRepository.addFriendshipRequest(targetEntity, addressee);
                             return null;
                         }
                 );
@@ -87,7 +87,7 @@ public class UsersDbClient implements UsersClient {
     }
 
     @Override
-    public void createFriends(UserJson targetUser, int count) {
+    public void addFriend(UserJson targetUser, int count) {
         if (count > 0) {
             UserEntity targetEntity = udUserRepository.findById(
                     targetUser.id()
@@ -98,8 +98,8 @@ public class UsersDbClient implements UsersClient {
                             String username = randomUsername();
                             AuthUserEntity authUser = authUserEntity(username, "12345");
                             authUserRepository.create(authUser);
-                            UserEntity adressee = udUserRepository.create(userEntity(username));
-                            udUserRepository.addFriend(targetEntity, adressee);
+                            UserEntity addressee = udUserRepository.create(userEntity(username));
+                            udUserRepository.addFriend(targetEntity, addressee);
                             return null;
                         }
                 );

@@ -15,7 +15,7 @@ public class JdbcTest {
     static UsersDbClient usersDbClient = new UsersDbClient();
 
     @ValueSource(strings = {
-            "valentin-31"
+            "valentin-35"
     })
     @ParameterizedTest
     void springJdbcTest(String uname) {
@@ -23,8 +23,8 @@ public class JdbcTest {
                 uname,
                 "12345"
         );
-        usersDbClient.createIncomeInvitation(user, 1);
-        usersDbClient.createOutcomeInvitation(user, 1);
+        usersDbClient.addIncomeInvitation(user, 1);
+        usersDbClient.addOutcomeInvitation(user, 1);
     }
 
     @Test

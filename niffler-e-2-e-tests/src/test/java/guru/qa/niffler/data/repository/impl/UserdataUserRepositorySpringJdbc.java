@@ -63,7 +63,7 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
     }
 
     @Override
-    public void sendInvitation(UserEntity requester, UserEntity addressee) {
+    public void addFriendshipRequest(UserEntity requester, UserEntity addressee) {
         FriendshipEntity friendship = new FriendshipEntity();
         friendship.setAddressee(addressee);
         friendship.setRequester(requester);
