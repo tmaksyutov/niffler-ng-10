@@ -8,7 +8,6 @@ import guru.qa.niffler.data.dao.impl.SpendDaoJdbc;
 import guru.qa.niffler.data.entity.spend.CategoryEntity;
 import guru.qa.niffler.data.entity.spend.SpendEntity;
 import guru.qa.niffler.data.repository.SpendRepository;
-import guru.qa.niffler.data.tpl.XaTransactionTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,20 +18,13 @@ public class SpendRepositoryJdbc implements SpendRepository {
     private static final SpendDao spendDao = new SpendDaoJdbc();
     private static final CategoryDao categoryDao = new CategoryDaoJdbc();
 
-    private final XaTransactionTemplate xaTransactionTemplate = new XaTransactionTemplate(
-            CFG.spendJdbcUrl()
-    );
-
     @Override
     public SpendEntity create(SpendEntity spend) {
-        return xaTransactionTemplate.execute(() -> {
-            SpendEntity resultSpend = spendDao.create(spend);
-            if (spend.getCategory() != null) {
-                categoryDao.findById(spend.getCategory().getId())
-                        .orElseGet(() -> categoryDao.create(spend.getCategory()));
-            }
-            return resultSpend;
-        });
+        if (spend.getCategory() != null && spend.getCategory().getId() == null) {
+            CategoryEntity createdCategory = categoryDao.create(spend.getCategory());
+            spend.getCategory().setId(createdCategory.getId());
+        }
+        return spendDao.create(spend);
     }
 
     @Override
