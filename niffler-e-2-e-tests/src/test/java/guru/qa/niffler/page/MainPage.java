@@ -2,6 +2,7 @@ package guru.qa.niffler.page;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.Keys;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -16,7 +17,8 @@ public class MainPage {
             allPeopleLink = $("a[href='/people/all']"),
             spendingTable = $("#spendings"),
             menuBtn = $("button[aria-label='Menu']"),
-            menu = $("ul[role='menu']");
+            menu = $("ul[role='menu']"),
+            searchInput = $("[aria-label=\"search\"]");
 
     private final ElementsCollection menuItems = menu.$$("li");
 
@@ -27,6 +29,7 @@ public class MainPage {
     }
 
     public EditSpendingPage editSpending(String description) {
+        searchInput.val(description).sendKeys(Keys.ENTER);
         tableRows.find(text(description)).$$("td").get(5).click();
         return new EditSpendingPage();
     }

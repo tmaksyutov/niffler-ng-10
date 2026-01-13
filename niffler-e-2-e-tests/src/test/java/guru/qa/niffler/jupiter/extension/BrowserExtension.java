@@ -1,6 +1,7 @@
 
 package guru.qa.niffler.jupiter.extension;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -9,14 +10,20 @@ import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.extension.*;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-
 import java.io.ByteArrayInputStream;
 
 public class BrowserExtension implements
+        BeforeAllCallback,
         BeforeEachCallback,
         AfterEachCallback,
         TestExecutionExceptionHandler,
         LifecycleMethodExecutionExceptionHandler {
+
+    @Override
+    public void beforeAll(ExtensionContext context) throws Exception {
+        Configuration.browser = "chrome";
+        Configuration.timeout = 8000L;
+    }
 
     @Override
     public void afterEach(ExtensionContext context) throws Exception {

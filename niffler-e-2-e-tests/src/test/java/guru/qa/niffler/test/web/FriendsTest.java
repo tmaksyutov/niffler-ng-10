@@ -2,20 +2,18 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.jupiter.annotation.UserType;
+import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
-import guru.qa.niffler.jupiter.extension.UsersQueueExtension;
-import guru.qa.niffler.model.StaticUser;
+import guru.qa.niffler.jupiter.extension.UserExtension;
+import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 
-import static guru.qa.niffler.jupiter.annotation.UserType.Type.*;
-
-
-@ExtendWith({BrowserExtension.class, UsersQueueExtension.class})
+@ExtendWith({BrowserExtension.class, UserExtension.class})
 public class FriendsTest {
 
     private static final Config CFG = Config.getInstance();
@@ -26,35 +24,49 @@ public class FriendsTest {
         loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
     }
 
+    @User(
+            friends = 1
+    )
     @Test
-    void friendShouldBePresentInFriendsTable(@UserType(WITH_FRIEND) StaticUser user) {
+    @DisplayName("Таблица друзей содержит друга")
+    void friendShouldBePresentInFriendsTable(UserJson user) {
         loginPage
-                .login(user.username(), user.password())
+                .login(user.username(), user.testData().password())
                 .goToFriendsPage()
-                .checkFriend(user.friend());
+                .checkFriend(user.testData().friends().getFirst().username());
     }
 
+    @User
     @Test
-    void friendsTableShouldBeEmptyForNewUser(@UserType(WITHOUT_FRIEND) StaticUser user) {
+    @DisplayName("Таблица друзей пустая")
+    void friendsTableShouldBeEmptyForNewUser(UserJson user) {
         loginPage
-                .login(user.username(), user.password())
+                .login(user.username(), user.testData().password())
                 .goToFriendsPage()
                 .checkFriendsEmpty();
     }
 
+    @User(
+            incomeInvitations = 1
+    )
     @Test
-    void incomeInvitationBePresentInFriendsTable(@UserType(WITH_INCOME_REQUEST) StaticUser user) {
+    @DisplayName("Таблица друзей содержит входящий запрос")
+    void incomeInvitationBePresentInFriendsTable(UserJson user) {
         loginPage
-                .login(user.username(), user.password())
+                .login(user.username(), user.testData().password())
                 .goToFriendsPage()
-                .checkRequest(user.income());
+                .checkRequest(user.testData().incomeInvitations().getFirst().username());
     }
 
+    @User(
+            outcomeInvitations = 1
+    )
     @Test
-    void outcomeInvitationBePresentInAllPeoplesTable(@UserType(WITH_OUTCOME_REQUEST) StaticUser user) {
+    @DisplayName("Список всех людей содержит исходящий запрос")
+    void outcomeInvitationBePresentInAllPeoplesTable(UserJson user) {
         loginPage
-                .login(user.username(), user.password())
+                .login(user.username(), user.testData().password())
                 .goToAllPeoplePage()
-                .checkUserWaiting(user.outcome());
+                .checkUserWaiting(user.testData().outcomeInvitations().getFirst().username());
     }
 }

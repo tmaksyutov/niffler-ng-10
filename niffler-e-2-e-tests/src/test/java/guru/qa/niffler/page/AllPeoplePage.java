@@ -2,6 +2,7 @@ package guru.qa.niffler.page;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.Keys;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -45,6 +46,7 @@ public class AllPeoplePage {
     }
 
     public AllPeoplePage checkUserWaiting(String userName) {
+        searchInput.val(userName).sendKeys(Keys.ENTER);
         peopleTableRows.findBy(text(userName))
                 .shouldHave(text("Waiting..."));
         return this;

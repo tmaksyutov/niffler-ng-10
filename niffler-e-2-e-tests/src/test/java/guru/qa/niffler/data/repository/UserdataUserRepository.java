@@ -15,10 +15,9 @@ public interface UserdataUserRepository {
 
     Optional<UserEntity> findByUsername(String username);
 
-    void sendInvitation(UserEntity requester, UserEntity addressee);
+    void addFriendshipRequest(UserEntity requester, UserEntity addressee);
 
     void addFriend(UserEntity requester, UserEntity addressee);
 
     void delete(UserEntity user);
-
 }
