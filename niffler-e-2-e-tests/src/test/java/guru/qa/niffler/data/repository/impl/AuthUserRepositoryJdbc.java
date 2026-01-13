@@ -8,7 +8,6 @@ import guru.qa.niffler.data.dao.impl.AuthUserDaoJdbc;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 import guru.qa.niffler.data.repository.AuthUserRepository;
-import guru.qa.niffler.data.tpl.XaTransactionTemplate;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -20,17 +19,13 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
     private static final AuthUserDao authUserDao = new AuthUserDaoJdbc();
     private static final AuthAuthorityDao authorityDao = new AuthAuthorityDaoJdbc();
 
-    private final XaTransactionTemplate xaTransactionTemplate = new XaTransactionTemplate(CFG.authJdbcUrl());
-
     @Override
     public AuthUserEntity create(AuthUserEntity user) {
-        return xaTransactionTemplate.execute(() -> {
             AuthUserEntity result = authUserDao.create(user);
             for (AuthorityEntity authority : user.getAuthorities()) {
                 authorityDao.create(authority);
             }
             return result;
-        });
     }
 
     @Override
@@ -56,12 +51,9 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
 
     @Override
     public void delete(AuthUserEntity user) {
-        xaTransactionTemplate.execute(() -> {
             for (AuthorityEntity authority : user.getAuthorities()) {
                 authorityDao.delete(authority);
             }
             authUserDao.delete(user);
-            return user;
-        });
     }
 }

@@ -9,7 +9,6 @@ import guru.qa.niffler.data.entity.user.FriendshipEntity;
 import guru.qa.niffler.data.entity.user.FriendshipStatus;
 import guru.qa.niffler.data.entity.user.UserEntity;
 import guru.qa.niffler.data.repository.UserdataUserRepository;
-import guru.qa.niffler.data.tpl.XaTransactionTemplate;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -20,22 +19,17 @@ public class UserdataUserRepositoryJdbc implements UserdataUserRepository {
     private static final UserDao userDao = new UserDaoJdbc();
     private static final FriendshipDao friendshipDao = new FriendshipDaoJdbc();
 
-    private final XaTransactionTemplate xaTransactionTemplate = new XaTransactionTemplate(
-            CFG.userdataJdbcUrl()
-    );
 
     @Override
     public UserEntity create(UserEntity user) {
-        return xaTransactionTemplate.execute(() -> {
-            UserEntity result = userDao.create(user);
-            for (FriendshipEntity friendship : user.getFriendshipAddressees()) {
-                friendshipDao.createFriendship(friendship);
-            }
-            for (FriendshipEntity friendship : user.getFriendshipRequests()) {
-                friendshipDao.createFriendship(friendship);
-            }
-            return result;
-        });
+        UserEntity result = userDao.create(user);
+        for (FriendshipEntity friendship : user.getFriendshipAddressees()) {
+            friendshipDao.createFriendship(friendship);
+        }
+        for (FriendshipEntity friendship : user.getFriendshipRequests()) {
+            friendshipDao.createFriendship(friendship);
+        }
+        return result;
     }
 
     @Override
@@ -72,35 +66,36 @@ public class UserdataUserRepositoryJdbc implements UserdataUserRepository {
 
     @Override
     public void addFriend(UserEntity requester, UserEntity addressee) {
-        xaTransactionTemplate.execute(() -> {
-            FriendshipEntity friendshipIncome = new FriendshipEntity();
-            friendshipIncome.setAddressee(addressee);
-            friendshipIncome.setRequester(requester);
-            friendshipIncome.setStatus(FriendshipStatus.ACCEPTED);
+        FriendshipEntity friendshipIncome = new FriendshipEntity();
+        friendshipIncome.setAddressee(addressee);
+        friendshipIncome.setRequester(requester);
+        friendshipIncome.setStatus(FriendshipStatus.ACCEPTED);
 
-            FriendshipEntity friendshipOutcome = new FriendshipEntity();
-            friendshipOutcome.setAddressee(requester);
-            friendshipOutcome.setRequester(addressee);
-            friendshipOutcome.setStatus(FriendshipStatus.ACCEPTED);
+        FriendshipEntity friendshipOutcome = new FriendshipEntity();
+        friendshipOutcome.setAddressee(requester);
+        friendshipOutcome.setRequester(addressee);
+        friendshipOutcome.setStatus(FriendshipStatus.ACCEPTED);
 
-            friendshipDao.createFriendship(friendshipIncome);
-            friendshipDao.createFriendship(friendshipOutcome);
-            return null;
-        });
+        friendshipDao.createFriendship(friendshipIncome);
+        friendshipDao.createFriendship(friendshipOutcome);
     }
 
     @Override
     public void delete(UserEntity user) {
-        xaTransactionTemplate.execute(() -> {
-                    for (FriendshipEntity friendship : user.getFriendshipAddressees()) {
-                        friendshipDao.deleteFriendship(friendship);
-                    }
-                    for (FriendshipEntity friendship : user.getFriendshipRequests()) {
-                        friendshipDao.deleteFriendship(friendship);
-                    }
-                    userDao.delete(user);
-                    return null;
+        if (user.getFriendshipAddressees() != null) {
+            for (FriendshipEntity friendship : user.getFriendshipAddressees()) {
+                if (friendship != null) {
+                    friendshipDao.deleteFriendship(friendship);
                 }
-        );
+            }
+        }
+        if (user.getFriendshipRequests() != null) {
+            for (FriendshipEntity friendship : user.getFriendshipRequests()) {
+                if (friendship != null) {
+                    friendshipDao.deleteFriendship(friendship);
+                }
+            }
+        }
+        userDao.delete(user);
     }
 }
