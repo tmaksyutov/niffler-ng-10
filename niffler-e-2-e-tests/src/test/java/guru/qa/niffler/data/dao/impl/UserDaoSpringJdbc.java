@@ -44,6 +44,35 @@ public class UserDaoSpringJdbc implements UserDao {
     }
 
     @Override
+    public UserEntity update(UserEntity user) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
+        try {
+            int count = jdbcTemplate.update(con -> {
+                PreparedStatement usersPs = con.prepareStatement(
+                        "UPDATE \"user\" " +
+                                "SET currency = ?, " +
+                                "firstname   = ?, " +
+                                "surname     = ?, " +
+                                "photo       = ?, " +
+                                "photo_small = ? " +
+                                "WHERE id = ?"
+                );
+                usersPs.setString(1, user.getCurrency().name());
+                usersPs.setString(2, user.getFirstname());
+                usersPs.setString(3, user.getSurname());
+                usersPs.setBytes(4, user.getPhoto());
+                usersPs.setBytes(5, user.getPhotoSmall());
+                usersPs.setObject(6, user.getId());
+                return usersPs;
+            });
+            if (count == 0) throw new SQLException("Can`t find category by id");
+            return user;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Optional<UserEntity> findById(UUID id) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         return Optional.ofNullable(

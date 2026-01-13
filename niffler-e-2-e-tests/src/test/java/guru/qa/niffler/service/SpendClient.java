@@ -14,4 +14,5 @@ public interface SpendClient {
     CategoryJson updateCategory(CategoryJson category);
 
     Optional<CategoryJson> findCategoryByNameAndUsername(String categoryName, String username);
+
 }

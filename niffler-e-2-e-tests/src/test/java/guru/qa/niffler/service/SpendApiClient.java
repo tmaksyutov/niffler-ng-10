@@ -120,4 +120,5 @@ public class SpendApiClient implements SpendClient {
         assertEquals(200, response.code());
         return response.body();
     }
+
 }

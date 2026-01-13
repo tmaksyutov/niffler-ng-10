@@ -50,6 +50,29 @@ public class UserDaoJdbc implements UserDao {
     }
 
     @Override
+    public UserEntity update(UserEntity user) {
+        try (PreparedStatement usersPs = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
+                "UPDATE \"user\" " +
+                        "SET currency = ?, " +
+                        "firstname   = ?, " +
+                        "surname     = ?, " +
+                        "photo       = ?, " +
+                        "photo_small = ? " +
+                        "WHERE id = ? ")) {
+            usersPs.setString(1, user.getCurrency().name());
+            usersPs.setString(2, user.getFirstname());
+            usersPs.setString(3, user.getSurname());
+            usersPs.setBytes(4, user.getPhoto());
+            usersPs.setBytes(5, user.getPhotoSmall());
+            usersPs.setObject(6, user.getId());
+            usersPs.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
+    }
+
+    @Override
     public Optional<UserEntity> findById(UUID id) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM \"user\" WHERE id = ?"
