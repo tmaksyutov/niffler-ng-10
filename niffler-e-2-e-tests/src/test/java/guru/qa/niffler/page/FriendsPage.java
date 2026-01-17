@@ -2,6 +2,7 @@ package guru.qa.niffler.page;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.Keys;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byXpath;
@@ -48,6 +49,7 @@ public class FriendsPage {
     }
 
     public FriendsPage checkFriend(String friendName) {
+        searchInput.val(friendName).sendKeys(Keys.ENTER);
         friendsTableRows.findBy(text(friendName))
                 .shouldBe(visible);
         return this;
@@ -59,6 +61,7 @@ public class FriendsPage {
     }
 
     public FriendsPage checkRequest(String friendName) {
+        searchInput.val(friendName).sendKeys(Keys.ENTER);
         requestsTableRows.findBy(text(friendName))
                 .shouldBe(visible);
         return this;

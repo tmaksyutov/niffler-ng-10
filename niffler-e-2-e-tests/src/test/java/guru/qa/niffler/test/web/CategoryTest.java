@@ -5,7 +5,7 @@ import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.WebTest;
-import guru.qa.niffler.model.CategoryJson;
+import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,36 +21,36 @@ public class CategoryTest {
         loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
     }
 
-    @User(username = "tmaksyutov",
+    @User(
             categories = {@Category()})
     @Test
-    void activeCategoryShouldPresentInCategoryList(CategoryJson category) {
+    void activeCategoryShouldPresentInCategoryList(UserJson user) {
         loginPage
-                .login("tmaksyutov", "12345")
+                .login(user.username(), "12345")
                 .goToProfilePage()
                 .checkProfilePageIsLoaded()
-                .checkCategoryIsDisplayed(category.name());
+                .checkCategoryIsDisplayed(user.testData().categories().getFirst().name());
     }
 
-    @User(username = "tmaksyutov",
+    @User(
             categories = {@Category(archived = true)})
     @Test
-    void archivedCategoryShouldNotBePresentedInActiveCategoryList(CategoryJson category) {
+    void archivedCategoryShouldNotBePresentedInActiveCategoryList(UserJson user) {
         loginPage
-                .login("tmaksyutov", "12345")
+                .login(user.username(), "12345")
                 .goToProfilePage()
                 .checkProfilePageIsLoaded()
-                .checkCategoryIsNotDisplayed(category.name());
+                .checkCategoryIsNotDisplayed(user.testData().categories().getFirst().name());
     }
 
-    @User(username = "tmaksyutov",
+    @User(
             categories = {@Category(archived = true)})
     @Test
-    void archivedCategoryShouldBePresentedInArchivedList(CategoryJson category) {
+    void archivedCategoryShouldBePresentedInArchivedList(UserJson user) {
         loginPage
-                .login("tmaksyutov", "12345")
+                .login(user.username(), "12345")
                 .goToProfilePage()
                 .checkProfilePageIsLoaded()
-                .checkArchivedCategoryExists(category.name());
+                .checkArchivedCategoryExists(user.testData().categories().getFirst().name());
     }
 }

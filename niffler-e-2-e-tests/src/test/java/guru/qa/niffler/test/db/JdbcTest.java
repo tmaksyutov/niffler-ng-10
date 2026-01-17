@@ -15,10 +15,10 @@ public class JdbcTest {
     static UsersDbClient usersDbClient = new UsersDbClient();
 
     @ValueSource(strings = {
-            "valentin-35"
+            "valentin-41"
     })
     @ParameterizedTest
-    void springJdbcTest(String uname) {
+    void jdbcTest(String uname) {
         UserJson user = usersDbClient.createUser(
                 uname,
                 "12345"

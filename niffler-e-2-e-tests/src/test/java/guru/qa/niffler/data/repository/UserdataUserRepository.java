@@ -20,5 +20,4 @@ public interface UserdataUserRepository {
     void addFriend(UserEntity requester, UserEntity addressee);
 
     void delete(UserEntity user);
-
 }
