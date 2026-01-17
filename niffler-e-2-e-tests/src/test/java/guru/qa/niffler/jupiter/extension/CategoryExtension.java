@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import org.junit.platform.commons.support.AnnotationSupport;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import static guru.qa.niffler.jupiter.extension.TestMethodContextExtension.context;
 import static guru.qa.niffler.utils.RandomDataUtils.randomCategoryName;
 
+@ParametersAreNonnullByDefault
 public class CategoryExtension implements
         BeforeEachCallback,
         AfterTestExecutionCallback,

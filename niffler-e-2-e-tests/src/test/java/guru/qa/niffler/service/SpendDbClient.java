@@ -8,9 +8,13 @@ import guru.qa.niffler.data.repository.impl.SpendRepositoryHibernate;
 import guru.qa.niffler.data.tpl.XaTransactionTemplate;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
+import io.qameta.allure.Step;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
+@ParametersAreNonnullByDefault
 public class SpendDbClient implements SpendClient {
 
     private static final Config CFG = Config.getInstance();
@@ -21,7 +25,8 @@ public class SpendDbClient implements SpendClient {
             CFG.spendJdbcUrl()
     );
 
-
+    @Nonnull
+    @Step("Create spend in database")
     @Override
     public SpendJson createSpend(SpendJson spend) {
         return xaTxTemplate.execute(() -> {
@@ -32,6 +37,8 @@ public class SpendDbClient implements SpendClient {
         });
     }
 
+    @Nonnull
+    @Step("Create category in database")
     @Override
     public CategoryJson createCategory(CategoryJson category) {
         return xaTxTemplate.execute(() -> CategoryJson.fromEntity(
@@ -42,6 +49,8 @@ public class SpendDbClient implements SpendClient {
         );
     }
 
+    @Nonnull
+    @Step("Update category in database")
     @Override
     public CategoryJson updateCategory(CategoryJson category) {
         return xaTxTemplate.execute(() -> CategoryJson.fromEntity(
@@ -52,6 +61,8 @@ public class SpendDbClient implements SpendClient {
         );
     }
 
+    @Nonnull
+    @Step("Find category by name '{categoryName}' for user '{username}' in database")
     @Override
     public Optional<CategoryJson> findCategoryByNameAndUsername(String categoryName, String username) {
         return xaTxTemplate.execute(() -> {

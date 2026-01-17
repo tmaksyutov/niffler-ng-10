@@ -9,7 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import java.sql.*;
+import javax.annotation.Nonnull;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,8 +21,9 @@ public class UserDaoSpringJdbc implements UserDao {
 
     private static final Config CFG = Config.getInstance();
 
+    @Nonnull
     @Override
-    public UserEntity create(UserEntity user) {
+    public UserEntity create(@Nonnull UserEntity user) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
@@ -43,8 +47,9 @@ public class UserDaoSpringJdbc implements UserDao {
         return user;
     }
 
+    @Nonnull
     @Override
-    public UserEntity update(UserEntity user) {
+    public UserEntity update(@Nonnull UserEntity user) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         try {
             int count = jdbcTemplate.update(con -> {
@@ -72,8 +77,9 @@ public class UserDaoSpringJdbc implements UserDao {
         }
     }
 
+    @Nonnull
     @Override
-    public Optional<UserEntity> findById(UUID id) {
+    public Optional<UserEntity> findById(@Nonnull UUID id) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         return Optional.ofNullable(
                 jdbcTemplate.queryForObject(
@@ -84,11 +90,13 @@ public class UserDaoSpringJdbc implements UserDao {
         );
     }
 
+    @Nonnull
     @Override
-    public Optional<UserEntity> findByUsername(String username) {
+    public Optional<UserEntity> findByUsername(@Nonnull String username) {
         throw new RuntimeException("User with username '" + username + "' not found");
     }
 
+    @Nonnull
     @Override
     public List<UserEntity> findAll() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
@@ -99,7 +107,7 @@ public class UserDaoSpringJdbc implements UserDao {
     }
 
     @Override
-    public void delete(UserEntity user) {
+    public void delete(@Nonnull UserEntity user) {
         throw new UnsupportedOperationException();
     }
 }

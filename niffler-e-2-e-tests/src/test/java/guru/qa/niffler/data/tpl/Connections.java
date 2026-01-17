@@ -1,10 +1,13 @@
 package guru.qa.niffler.data.tpl;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 
+@ParametersAreNonnullByDefault
 public class Connections {
 
     private Connections() {
@@ -12,7 +15,8 @@ public class Connections {
 
     private static final Map<String, JdbcConnectionHolder> holders = new ConcurrentHashMap<>();
 
-    public static JdbcConnectionHolder holder(String jdbcUrl) {
+    @Nonnull
+    public static JdbcConnectionHolder holder(@Nonnull String jdbcUrl) {
         return holders.computeIfAbsent(
                 jdbcUrl,
                 key -> new JdbcConnectionHolder(
@@ -21,7 +25,8 @@ public class Connections {
         );
     }
 
-    public static JdbcConnectionHolders holders(String... jdbcUrl) {
+    @Nonnull
+    public static JdbcConnectionHolders holders(@Nonnull String... jdbcUrl) {
         List<JdbcConnectionHolder> holders = new ArrayList<>();
         for (String url : jdbcUrl) {
             holders.add(holder(url));
@@ -32,5 +37,4 @@ public class Connections {
     public static void closeAllConnections() {
         holders.values().forEach(JdbcConnectionHolder::closeAllConnections);
     }
-
 }

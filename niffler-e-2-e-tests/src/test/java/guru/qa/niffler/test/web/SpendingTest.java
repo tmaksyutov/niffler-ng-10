@@ -4,15 +4,20 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.jupiter.annotation.User;
+import guru.qa.niffler.jupiter.annotation.WebTest;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
+import guru.qa.niffler.utils.RandomDataUtils;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@WebTest
 public class SpendingTest {
 
     private static final Config CFG = Config.getInstance();
 
+    @DisplayName("Редактирование описания расхода через действие в таблице")
     @User(
             spendings = {@Spending(
                     category = "Учеба",
@@ -28,6 +33,21 @@ public class SpendingTest {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .editSpending(spendDescription)
+                .setNewSpendingDescription(newDescription)
+                .save()
+                .checkThatTableContains(newDescription);
+    }
+
+    @DisplayName("Добавление нового расхода")
+    @User
+    @Test
+    void addNewSpending(UserJson user) {
+        String newDescription = RandomDataUtils.randomSentence(1);
+        Selenide.open(CFG.frontUrl(), LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .addSpending()
+                .setNewSpendingAmount(RandomDataUtils.randomInteger())
+                .setNewSpendingCategory(RandomDataUtils.randomCategoryName())
                 .setNewSpendingDescription(newDescription)
                 .save()
                 .checkThatTableContains(newDescription);

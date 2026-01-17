@@ -9,9 +9,12 @@ import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 import guru.qa.niffler.data.repository.AuthUserRepository;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
 
     private static final Config CFG = Config.getInstance();
@@ -19,30 +22,34 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
     private static final AuthUserDao authUserDao = new AuthUserDaoSpringJdbc();
     private static final AuthAuthorityDao authorityDao = new AuthAuthorityDaoSpringJdbc();
 
+    @Nonnull
     @Override
-    public AuthUserEntity create(AuthUserEntity user) {
-            AuthUserEntity result = authUserDao.create(user);
-            for (AuthorityEntity authority : user.getAuthorities()) {
-                authorityDao.create(authority);
-            }
-            return result;
+    public AuthUserEntity create(@Nonnull AuthUserEntity user) {
+        AuthUserEntity result = authUserDao.create(user);
+        for (AuthorityEntity authority : user.getAuthorities()) {
+            authorityDao.create(authority);
+        }
+        return result;
     }
 
+    @Nonnull
     @Override
-    public AuthUserEntity update(AuthUserEntity user) {
+    public AuthUserEntity update(@Nonnull AuthUserEntity user) {
         return authUserDao.update(user);
     }
 
+    @Nonnull
     @Override
-    public Optional<AuthUserEntity> findById(UUID id) {
+    public Optional<AuthUserEntity> findById(@Nonnull UUID id) {
         return authUserDao.findById(id).map(userEntity -> {
             userEntity.setAuthorities(authorityDao.findByUserId((id)));
             return userEntity;
         });
     }
 
+    @Nonnull
     @Override
-    public Optional<AuthUserEntity> findByUsername(String username) {
+    public Optional<AuthUserEntity> findByUsername(@Nonnull String username) {
         return authUserDao.findByUsername(username).map(userEntity -> {
             userEntity.setAuthorities(authorityDao.findByUserId((userEntity.getId())));
             return userEntity;
@@ -50,7 +57,7 @@ public class AuthUserRepositorySpringJdbc implements AuthUserRepository {
     }
 
     @Override
-    public void delete(AuthUserEntity user) {
+    public void delete(@Nonnull AuthUserEntity user) {
         for (AuthorityEntity authority : user.getAuthorities()) {
             authorityDao.delete(authority);
         }

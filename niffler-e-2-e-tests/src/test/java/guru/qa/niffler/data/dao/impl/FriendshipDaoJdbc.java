@@ -6,6 +6,7 @@ import guru.qa.niffler.data.entity.user.FriendshipEntity;
 import guru.qa.niffler.data.entity.user.FriendshipStatus;
 import guru.qa.niffler.data.entity.user.UserEntity;
 
+import javax.annotation.Nonnull;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ public class FriendshipDaoJdbc implements FriendshipDao {
     private static final Config CFG = Config.getInstance();
 
     @Override
-    public void createFriendship(FriendshipEntity friendship) {
+    public void createFriendship(@Nonnull FriendshipEntity friendship) {
         try (PreparedStatement friendshipPs = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "INSERT INTO friendship (requester_id, addressee_id, status) " +
                         "VALUES (?, ?, ?) " +
@@ -37,7 +38,7 @@ public class FriendshipDaoJdbc implements FriendshipDao {
     }
 
     @Override
-    public void deleteFriendship(FriendshipEntity friendship) {
+    public void deleteFriendship(@Nonnull FriendshipEntity friendship) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "DELETE FROM friendship WHERE requester_id = ? AND addressee_id = ?"
         )) {
@@ -49,8 +50,9 @@ public class FriendshipDaoJdbc implements FriendshipDao {
         }
     }
 
+    @Nonnull
     @Override
-    public List<FriendshipEntity> findByRequesterId(UUID requesterId) {
+    public List<FriendshipEntity> findByRequesterId(@Nonnull UUID requesterId) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM friendship WHERE requester_id = ?"
         )) {
@@ -64,8 +66,9 @@ public class FriendshipDaoJdbc implements FriendshipDao {
         }
     }
 
+    @Nonnull
     @Override
-    public List<FriendshipEntity> findByAddresseeId(UUID addresseeId) {
+    public List<FriendshipEntity> findByAddresseeId(@Nonnull UUID addresseeId) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM friendship WHERE addressee_id = ?"
         )) {
@@ -79,7 +82,8 @@ public class FriendshipDaoJdbc implements FriendshipDao {
         }
     }
 
-    private FriendshipEntity getFriendship(ResultSet rs) throws SQLException {
+    @Nonnull
+    private FriendshipEntity getFriendship(@Nonnull ResultSet rs) throws SQLException {
         FriendshipEntity friendship = new FriendshipEntity();
 
         UserEntity requester = new UserEntity();
@@ -95,7 +99,8 @@ public class FriendshipDaoJdbc implements FriendshipDao {
         return friendship;
     }
 
-    private List<FriendshipEntity> getFriendships(ResultSet rs) throws SQLException {
+    @Nonnull
+    private List<FriendshipEntity> getFriendships(@Nonnull ResultSet rs) throws SQLException {
         List<FriendshipEntity> friendshipEntities = new ArrayList<>();
         while (rs.next()) friendshipEntities.add(getFriendship(rs));
         return friendshipEntities;

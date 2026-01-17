@@ -6,39 +6,46 @@ import guru.qa.niffler.data.repository.AuthUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
 import static guru.qa.niffler.data.jpa.EntityManagers.em;
 
+@ParametersAreNonnullByDefault
 public class AuthUserRepositoryHibernate implements AuthUserRepository {
 
     private static final Config CFG = Config.getInstance();
 
     private final EntityManager entityManager = em(CFG.authJdbcUrl());
 
+    @Nonnull
     @Override
-    public AuthUserEntity create(AuthUserEntity user) {
+    public AuthUserEntity create(@Nonnull AuthUserEntity user) {
         entityManager.joinTransaction();
         entityManager.persist(user);
         return user;
     }
 
+    @Nonnull
     @Override
-    public AuthUserEntity update(AuthUserEntity user) {
+    public AuthUserEntity update(@Nonnull AuthUserEntity user) {
         entityManager.joinTransaction();
         return entityManager.merge(user);
     }
 
+    @Nonnull
     @Override
-    public Optional<AuthUserEntity> findById(UUID id) {
+    public Optional<AuthUserEntity> findById(@Nonnull UUID id) {
         return Optional.ofNullable(
                 entityManager.find(AuthUserEntity.class, id)
         );
     }
 
+    @Nonnull
     @Override
-    public Optional<AuthUserEntity> findByUsername(String username) {
+    public Optional<AuthUserEntity> findByUsername(@Nonnull String username) {
         try {
             return Optional.of(
                     entityManager.createQuery("SELECT u FROM UserEntity u WHERE u.username = :username", AuthUserEntity.class)
@@ -51,7 +58,7 @@ public class AuthUserRepositoryHibernate implements AuthUserRepository {
     }
 
     @Override
-    public void delete(AuthUserEntity user) {
+    public void delete(@Nonnull AuthUserEntity user) {
         entityManager.joinTransaction();
         if (!entityManager.contains(user)) {
             user = entityManager.merge(user);

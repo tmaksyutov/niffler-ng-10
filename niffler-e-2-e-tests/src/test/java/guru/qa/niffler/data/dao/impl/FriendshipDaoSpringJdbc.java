@@ -7,6 +7,7 @@ import guru.qa.niffler.data.mapper.FriendshipEntityRowMapper;
 import guru.qa.niffler.data.tpl.DataSources;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.annotation.Nonnull;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.UUID;
@@ -15,8 +16,7 @@ public class FriendshipDaoSpringJdbc implements FriendshipDao {
     private static final Config CFG = Config.getInstance();
 
     @Override
-    public void createFriendship(FriendshipEntity friendship) {
-
+    public void createFriendship(@Nonnull FriendshipEntity friendship) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(
@@ -31,9 +31,8 @@ public class FriendshipDaoSpringJdbc implements FriendshipDao {
         });
     }
 
-
     @Override
-    public void deleteFriendship(FriendshipEntity friendship) {
+    public void deleteFriendship(@Nonnull FriendshipEntity friendship) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         jdbcTemplate.update(
                 "DELETE FROM friendship WHERE requester_id = ? AND addressee_id = ?",
@@ -42,8 +41,9 @@ public class FriendshipDaoSpringJdbc implements FriendshipDao {
         );
     }
 
+    @Nonnull
     @Override
-    public List<FriendshipEntity> findByRequesterId(UUID requesterId) {
+    public List<FriendshipEntity> findByRequesterId(@Nonnull UUID requesterId) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         return jdbcTemplate.query(
                 "SELECT * FROM friendship WHERE requester_id = ?",
@@ -52,8 +52,9 @@ public class FriendshipDaoSpringJdbc implements FriendshipDao {
         );
     }
 
+    @Nonnull
     @Override
-    public List<FriendshipEntity> findByAddresseeId(UUID addresseeId) {
+    public List<FriendshipEntity> findByAddresseeId(@Nonnull UUID addresseeId) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         return jdbcTemplate.query(
                 "SELECT * FROM friendship WHERE addressee_id = ?",

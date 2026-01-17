@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import javax.annotation.Nonnull;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
@@ -19,8 +20,9 @@ public class AuthUserDaoSpringJdbc implements AuthUserDao {
 
     private static final Config CFG = Config.getInstance();
 
+    @Nonnull
     @Override
-    public AuthUserEntity create(AuthUserEntity user) {
+    public AuthUserEntity create(@Nonnull AuthUserEntity user) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
@@ -43,13 +45,15 @@ public class AuthUserDaoSpringJdbc implements AuthUserDao {
         return user;
     }
 
+    @Nonnull
     @Override
-    public AuthUserEntity update(AuthUserEntity user) {
+    public AuthUserEntity update(@Nonnull AuthUserEntity user) {
         throw new RuntimeException("Update operation not supported");
     }
 
+    @Nonnull
     @Override
-    public Optional<AuthUserEntity> findById(UUID id) {
+    public Optional<AuthUserEntity> findById(@Nonnull UUID id) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
         return Optional.ofNullable(
                 jdbcTemplate.queryForObject(
@@ -60,11 +64,13 @@ public class AuthUserDaoSpringJdbc implements AuthUserDao {
         );
     }
 
+    @Nonnull
     @Override
-    public Optional<AuthUserEntity> findByUsername(String username) {
+    public Optional<AuthUserEntity> findByUsername(@Nonnull String username) {
         throw new RuntimeException("User with username '" + username + "' not found");
     }
 
+    @Nonnull
     @Override
     public List<AuthUserEntity> findAll() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
@@ -75,7 +81,7 @@ public class AuthUserDaoSpringJdbc implements AuthUserDao {
     }
 
     @Override
-    public void delete(AuthUserEntity user) {
+    public void delete(@Nonnull AuthUserEntity user) {
         throw new UnsupportedOperationException();
     }
 }

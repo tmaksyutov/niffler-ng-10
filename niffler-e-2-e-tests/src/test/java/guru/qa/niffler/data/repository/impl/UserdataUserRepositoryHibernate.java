@@ -1,6 +1,5 @@
 package guru.qa.niffler.data.repository.impl;
 
-
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.data.entity.user.FriendshipStatus;
 import guru.qa.niffler.data.entity.user.UserEntity;
@@ -8,39 +7,46 @@ import guru.qa.niffler.data.repository.UserdataUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
 import static guru.qa.niffler.data.jpa.EntityManagers.em;
 
+@ParametersAreNonnullByDefault
 public class UserdataUserRepositoryHibernate implements UserdataUserRepository {
 
     private static final Config CFG = Config.getInstance();
 
     private final EntityManager entityManager = em(CFG.userdataJdbcUrl());
 
+    @Nonnull
     @Override
-    public UserEntity create(UserEntity user) {
+    public UserEntity create(@Nonnull UserEntity user) {
         entityManager.joinTransaction();
         entityManager.persist(user);
         return user;
     }
 
+    @Nonnull
     @Override
-    public UserEntity update(UserEntity user) {
+    public UserEntity update(@Nonnull UserEntity user) {
         entityManager.joinTransaction();
         return entityManager.merge(user);
     }
 
+    @Nonnull
     @Override
-    public Optional<UserEntity> findById(UUID id) {
+    public Optional<UserEntity> findById(@Nonnull UUID id) {
         return Optional.ofNullable(
                 entityManager.find(UserEntity.class, id)
         );
     }
 
+    @Nonnull
     @Override
-    public Optional<UserEntity> findByUsername(String username) {
+    public Optional<UserEntity> findByUsername(@Nonnull String username) {
         try {
             return Optional.of(
                     entityManager.createQuery("SELECT u FROM UserEntity u WHERE u.username = :username", UserEntity.class)
@@ -53,20 +59,26 @@ public class UserdataUserRepositoryHibernate implements UserdataUserRepository {
     }
 
     @Override
-    public void addFriendshipRequest(UserEntity requester, UserEntity addressee) {
+    public void addFriendshipRequest(
+            @Nonnull UserEntity requester,
+            @Nonnull UserEntity addressee
+    ) {
         entityManager.joinTransaction();
         requester.addFriends(FriendshipStatus.PENDING, addressee);
     }
 
     @Override
-    public void addFriend(UserEntity requester, UserEntity addressee) {
+    public void addFriend(
+            @Nonnull UserEntity requester,
+            @Nonnull UserEntity addressee
+    ) {
         entityManager.joinTransaction();
         requester.addFriends(FriendshipStatus.ACCEPTED, addressee);
         addressee.addFriends(FriendshipStatus.ACCEPTED, requester);
     }
 
     @Override
-    public void delete(UserEntity user) {
+    public void delete(@Nonnull UserEntity user) {
         entityManager.joinTransaction();
         if (!entityManager.contains(user)) {
             user = entityManager.merge(user);

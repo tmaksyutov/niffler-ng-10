@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+import javax.annotation.Nonnull;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,13 +23,13 @@ public class AuthAuthorityDaoSpringJdbc implements AuthAuthorityDao {
     private static final Config CFG = Config.getInstance();
 
     @Override
-    public void create(AuthorityEntity... authority) {
+    public void create(@Nonnull AuthorityEntity... authority) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
         jdbcTemplate.batchUpdate(
                 "INSERT INTO authority (user_id, authority) VALUES (? , ?)",
                 new BatchPreparedStatementSetter() {
                     @Override
-                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    public void setValues(@Nonnull PreparedStatement ps, int i) throws SQLException {
                         ps.setObject(1, authority[i].getUser().getId());
                         ps.setString(2, authority[i].getAuthority().name());
                     }
@@ -41,24 +42,28 @@ public class AuthAuthorityDaoSpringJdbc implements AuthAuthorityDao {
         );
     }
 
+    @Nonnull
     @Override
-    public List<AuthorityEntity> findByUserId(UUID id) {
+    public List<AuthorityEntity> findByUserId(@Nonnull UUID id) {
         throw new RuntimeException("Authorities for user with id " + id + " not found");
     }
 
+    @Nonnull
     @Override
-    public Optional<AuthorityEntity> findById(UUID id) {
+    public Optional<AuthorityEntity> findById(@Nonnull UUID id) {
         throw new RuntimeException("AuthorityEntity with id " + id + " not found");
     }
 
+    @Nonnull
     @Override
     public List<AuthorityEntity> findAll() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
         return jdbcTemplate.query(
                 "SELECT * FROM authority",
                 new RowMapper<AuthorityEntity>() {
+                    @Nonnull
                     @Override
-                    public AuthorityEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    public AuthorityEntity mapRow(@Nonnull ResultSet rs, int rowNum) throws SQLException {
                         AuthorityEntity authority = new AuthorityEntity();
                         authority.setId(rs.getObject("id", UUID.class));
                         authority.setAuthority(rs.getObject("authority", Authority.class));
@@ -72,7 +77,7 @@ public class AuthAuthorityDaoSpringJdbc implements AuthAuthorityDao {
     }
 
     @Override
-    public void delete(AuthorityEntity authority) {
+    public void delete(@Nonnull AuthorityEntity authority) {
         throw new UnsupportedOperationException();
     }
 }
