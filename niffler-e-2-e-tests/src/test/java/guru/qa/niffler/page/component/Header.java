@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 @ParametersAreNonnullByDefault
-public class Header {
+public class Header extends BaseComponent<Header> {
 
     private final SelenideElement self = $("#root header");
 
@@ -21,6 +21,10 @@ public class Header {
     private final SelenideElement profileMenuButton = self.find("button[aria-label='Menu']");
 
     private final ElementsCollection menuList = $$("ul[role='menu'] li");
+
+    public Header() {
+        super($("#root header"));
+    }
 
     @Step("Check header text")
     public void checkHeaderText() {

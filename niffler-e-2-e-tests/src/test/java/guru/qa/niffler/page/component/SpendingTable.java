@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
 @ParametersAreNonnullByDefault
-public class SpendingTable {
+public class SpendingTable extends BaseComponent<SpendingTable> {
 
     private final SelenideElement self = $("#spendings");
 
@@ -31,6 +31,10 @@ public class SpendingTable {
     private final ElementsCollection periodList = self.$$(".MuiMenu-list");
 
     private final ElementsCollection spendingRows = self.$("tbody").$$("tr");
+
+    public SpendingTable() {
+        super($("#spendings"));
+    }
 
     @Step("Select period")
     public SpendingTable selectPeriod(DataFilterValues period) {

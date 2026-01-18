@@ -6,7 +6,6 @@ import io.qameta.allure.Step;
 import lombok.SneakyThrows;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.util.Objects.requireNonNull;
@@ -26,14 +25,11 @@ public final class GhApiClient extends RestClient {
     @Nonnull
     @Step("Get issue state for issue number '{issueNumber}'")
     @SneakyThrows
-    public String issueState(@Nonnull String issueNumber) {
-        @Nullable JsonNode responseBody = ghApi.issue(
+    public String issueState(String issueNumber) {
+        JsonNode responseBody = ghApi.issue(
                 "Bearer " + System.getenv(GH_TOKEN_ENV),
                 issueNumber
         ).execute().body();
-
-        JsonNode response = requireNonNull(responseBody, "Response body is null");
-        JsonNode stateNode = response.get("state");
-        return requireNonNull(stateNode, "State field is missing in response").asText();
+        return requireNonNull(responseBody).get("state").asText();
     }
 }
