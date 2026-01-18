@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.*;
 
 @ParametersAreNonnullByDefault
-public class AllPeoplePage {
+public class AllPeoplePage extends BasePage<AllPeoplePage> {
     private final ElementsCollection
             allPeopleTable = $$("#all tr");
     private final SelenideElement

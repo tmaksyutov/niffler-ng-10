@@ -15,18 +15,17 @@ public class ProfileTest {
 
     private static final Config CFG = Config.getInstance();
 
-    @DisplayName("Редактирование имени профиля")
+    @DisplayName("Редактирование имени пользователя в профиле")
     @User
     @Test
-    void editProfileName(UserJson user) {
+    void nameShouldBeEditedInProfile(UserJson user) {
         String newName = RandomDataUtils.randomName();
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .goToProfilePage()
                 .setNewName(newName)
                 .saveChanges()
-                .returnToMainPage()
-                .goToProfilePage()
-                .checkUserName(newName);
+                .checkUserName(newName)
+                .checkSnackbarText("Profile successfully updated");
     }
 }

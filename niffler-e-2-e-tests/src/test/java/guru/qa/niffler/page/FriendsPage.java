@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 @ParametersAreNonnullByDefault
-public class FriendsPage {
+public class FriendsPage extends BasePage<FriendsPage> {
     private final ElementsCollection
             friendsTable = $$("#friends tr"),
             requestsTable = $$("#requests tr");

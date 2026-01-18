@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 @ParametersAreNonnullByDefault
-public class ProfilePage {
+public class ProfilePage extends BasePage<ProfilePage> {
 
     private final SelenideElement
             avatar = $(".MuiAvatar-root"),

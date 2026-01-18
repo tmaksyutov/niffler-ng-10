@@ -11,7 +11,7 @@ import java.util.Date;
 import static com.codeborne.selenide.Selenide.$;
 
 @ParametersAreNonnullByDefault
-public class EditSpendingPage {
+public class EditSpendingPage extends BasePage<EditSpendingPage> {
 
     private final SelenideElement descriptionInput = $("#description"),
             saveBtn = $("#save"),
