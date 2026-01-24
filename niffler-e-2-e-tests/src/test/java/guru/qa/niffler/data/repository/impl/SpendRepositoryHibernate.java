@@ -7,17 +7,21 @@ import guru.qa.niffler.data.repository.SpendRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static guru.qa.niffler.data.jpa.EntityManagers.em;
 
+@ParametersAreNonnullByDefault
 public class SpendRepositoryHibernate implements SpendRepository {
     private static final Config CFG = Config.getInstance();
 
     private final EntityManager entityManager = em(CFG.spendJdbcUrl());
 
+    @Nonnull
     @Override
     public SpendEntity create(SpendEntity spend) {
         entityManager.joinTransaction();
@@ -25,6 +29,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
         return spend;
     }
 
+    @Nonnull
     @Override
     public SpendEntity update(SpendEntity spend) {
         entityManager.joinTransaction();
@@ -32,11 +37,13 @@ public class SpendRepositoryHibernate implements SpendRepository {
         return spend;
     }
 
+    @Nonnull
     @Override
     public Optional<SpendEntity> findSpendById(UUID id) {
         return Optional.ofNullable(entityManager.find(SpendEntity.class, id));
     }
 
+    @Nonnull
     @Override
     public List<SpendEntity> findAllByUsername(String username) {
         return entityManager.createQuery("SELECT s FROM SpendEntity s WHERE s.username = :username", SpendEntity.class)
@@ -44,6 +51,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
                 .getResultList();
     }
 
+    @Nonnull
     @Override
     public List<SpendEntity> findAll() {
         return entityManager.createQuery("SELECT s FROM SpendEntity s", SpendEntity.class)
@@ -59,6 +67,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
         entityManager.remove(spend);
     }
 
+    @Nonnull
     @Override
     public CategoryEntity createCategory(CategoryEntity category) {
         entityManager.joinTransaction();
@@ -66,6 +75,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
         return category;
     }
 
+    @Nonnull
     @Override
     public CategoryEntity updateCategory(CategoryEntity category) {
         entityManager.joinTransaction();
@@ -73,11 +83,13 @@ public class SpendRepositoryHibernate implements SpendRepository {
         return category;
     }
 
+    @Nonnull
     @Override
     public Optional<CategoryEntity> findCategoryById(UUID id) {
         return Optional.ofNullable(entityManager.find(CategoryEntity.class, id));
     }
 
+    @Nonnull
     @Override
     public Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
         try {

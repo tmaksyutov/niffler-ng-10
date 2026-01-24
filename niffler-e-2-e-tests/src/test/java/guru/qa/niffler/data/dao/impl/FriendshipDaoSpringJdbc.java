@@ -7,16 +7,18 @@ import guru.qa.niffler.data.mapper.FriendshipEntityRowMapper;
 import guru.qa.niffler.data.tpl.DataSources;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class FriendshipDaoSpringJdbc implements FriendshipDao {
     private static final Config CFG = Config.getInstance();
 
     @Override
     public void createFriendship(FriendshipEntity friendship) {
-
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(
@@ -31,7 +33,6 @@ public class FriendshipDaoSpringJdbc implements FriendshipDao {
         });
     }
 
-
     @Override
     public void deleteFriendship(FriendshipEntity friendship) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
@@ -42,6 +43,7 @@ public class FriendshipDaoSpringJdbc implements FriendshipDao {
         );
     }
 
+    @Nonnull
     @Override
     public List<FriendshipEntity> findByRequesterId(UUID requesterId) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
@@ -52,6 +54,7 @@ public class FriendshipDaoSpringJdbc implements FriendshipDao {
         );
     }
 
+    @Nonnull
     @Override
     public List<FriendshipEntity> findByAddresseeId(UUID addresseeId) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));

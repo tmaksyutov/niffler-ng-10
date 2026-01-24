@@ -5,6 +5,8 @@ import guru.qa.niffler.data.dao.UserDao;
 import guru.qa.niffler.data.entity.user.UserEntity;
 import guru.qa.niffler.model.CurrencyValues;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +15,12 @@ import java.util.UUID;
 
 import static guru.qa.niffler.data.tpl.Connections.holder;
 
+@ParametersAreNonnullByDefault
 public class UserDaoJdbc implements UserDao {
 
     private static final Config CFG = Config.getInstance();
 
+    @Nonnull
     @Override
     public UserEntity create(UserEntity user) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
@@ -49,6 +53,7 @@ public class UserDaoJdbc implements UserDao {
         }
     }
 
+    @Nonnull
     @Override
     public UserEntity update(UserEntity user) {
         try (PreparedStatement usersPs = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
@@ -72,6 +77,7 @@ public class UserDaoJdbc implements UserDao {
         return user;
     }
 
+    @Nonnull
     @Override
     public Optional<UserEntity> findById(UUID id) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
@@ -91,6 +97,7 @@ public class UserDaoJdbc implements UserDao {
         }
     }
 
+    @Nonnull
     @Override
     public Optional<UserEntity> findByUsername(String username) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
@@ -122,6 +129,7 @@ public class UserDaoJdbc implements UserDao {
         }
     }
 
+    @Nonnull
     @Override
     public List<UserEntity> findAll() {
         List<UserEntity> users = new ArrayList<>();
@@ -140,6 +148,7 @@ public class UserDaoJdbc implements UserDao {
         }
     }
 
+    @Nonnull
     private UserEntity getUser(ResultSet rs) throws SQLException {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(rs.getObject("id", UUID.class));

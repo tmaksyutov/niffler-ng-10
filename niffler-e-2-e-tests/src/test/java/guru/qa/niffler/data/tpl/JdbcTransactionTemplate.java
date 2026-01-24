@@ -1,10 +1,14 @@
 package guru.qa.niffler.data.tpl;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
+@ParametersAreNonnullByDefault
 public class JdbcTransactionTemplate {
 
     private final JdbcConnectionHolder holder;
@@ -20,10 +24,12 @@ public class JdbcTransactionTemplate {
         return this;
     }
 
+    @Nullable
     public <T> T execute(Supplier<T> action) {
         return execute(action, Connection.TRANSACTION_READ_COMMITTED);
     }
 
+    @Nullable
     public <T> T execute(Supplier<T> action, int isolationLevel) {
         Connection connection = null;
         try {
@@ -50,5 +56,4 @@ public class JdbcTransactionTemplate {
             }
         }
     }
-
 }

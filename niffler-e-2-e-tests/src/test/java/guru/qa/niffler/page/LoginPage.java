@@ -3,10 +3,14 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
-public class LoginPage {
+@ParametersAreNonnullByDefault
+public class LoginPage extends BasePage<LoginPage> {
     private final SelenideElement
             usernameInput = $("#username"),
             passwordInput = $("#password"),
@@ -14,6 +18,7 @@ public class LoginPage {
             registerBtn = $("#register-button"),
             errorMessage = $(".form__error");
 
+    @Nonnull
     @Step("Login with username: '{username}' and password: '{password}'")
     public MainPage login(String username, String password) {
         usernameInput.val(username);
@@ -22,6 +27,7 @@ public class LoginPage {
         return new MainPage();
     }
 
+    @Nonnull
     @Step("Login with username: '{username}' and incorrect password: '{password}'")
     public LoginPage loginWithBadCredentials(String username, String incorrectPassword) {
         usernameInput.val(username);
@@ -30,18 +36,21 @@ public class LoginPage {
         return this;
     }
 
+    @Nonnull
     @Step("Check error message: '{message}'")
     public LoginPage checkErrorMessage(String message) {
         errorMessage.shouldHave(text(message));
         return this;
     }
 
+    @Nonnull
     @Step("Go to registration page")
     public RegistrationPage goToRegistrationPage() {
         registerBtn.click();
         return new RegistrationPage();
     }
 
+    @Nonnull
     @Step("Check that login page is loaded")
     public LoginPage checkLoginPageIsLoaded() {
         usernameInput.shouldBe(visible);
@@ -50,5 +59,4 @@ public class LoginPage {
         registerBtn.shouldBe(visible);
         return this;
     }
-
 }

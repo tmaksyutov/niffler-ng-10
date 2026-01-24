@@ -23,8 +23,8 @@ public class RegistrationTest {
         loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
     }
 
-    @Test
     @DisplayName("Успешная регистрация нового пользователя")
+    @Test
     void shouldRegisterNewUser() {
         loginPage
                 .goToRegistrationPage()
@@ -33,8 +33,8 @@ public class RegistrationTest {
                 .checkLoginPageIsLoaded();
     }
 
-    @Test
     @DisplayName("Ошибка регистрации существующего пользователя")
+    @Test
     void shouldNotRegisterUserWithExistingUsername() {
         String username = randomUsername();
         String password = randomPassword();
@@ -53,8 +53,8 @@ public class RegistrationTest {
                 .checkErrorMessageIsVisible(errorMessage);
     }
 
-    @Test
     @DisplayName("Ошибка при несовпадении пароля и подтверждения")
+    @Test
     void shouldShowErrorIfPasswordAndConfirmPasswordAreNotEqual() {
         String username = randomUsername();
         String password = randomPassword();
@@ -71,9 +71,8 @@ public class RegistrationTest {
                 .checkErrorMessageIsVisible(errorMessage);
     }
 
-
-    @Test
     @DisplayName("Успешный логин существующего пользователя")
+    @Test
     void mainPageShouldBeDisplayedAfterSuccessLogin() {
         String username = randomUsername();
         String password = randomPassword();
@@ -85,8 +84,8 @@ public class RegistrationTest {
                 .checkMainPageIsLoaded();
     }
 
-    @Test
     @DisplayName("Ошибка при логине с некорректными данными")
+    @Test
     void userShouldStayOnLoginPageAfterLoginWithBadCredentials() {
         String username = randomUsername();
         String correctPassword = randomPassword();

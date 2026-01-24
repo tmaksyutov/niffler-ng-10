@@ -1,59 +1,66 @@
 package guru.qa.niffler.page;
 
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.Keys;
+import guru.qa.niffler.page.component.Header;
+import guru.qa.niffler.page.component.SpendingTable;
+import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.Condition.text;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 
-public class MainPage {
-    private final ElementsCollection tableRows = $$("#spendings tr");
-    private final SelenideElement
-            personIcon = $("[data-testid='PersonIcon']"),
-            friendsLink = $("a[href='/people/friends']"),
-            allPeopleLink = $("a[href='/people/all']"),
-            spendingTable = $("#spendings"),
-            menuBtn = $("button[aria-label='Menu']"),
-            menu = $("ul[role='menu']"),
-            searchInput = $("[aria-label=\"search\"]");
+@ParametersAreNonnullByDefault
+public class MainPage extends BasePage<MainPage> {
 
-    private final ElementsCollection menuItems = menu.$$("li");
+    private final SelenideElement statistics = $("#stat");
 
+    private final SpendingTable spendingTable = new SpendingTable();
+
+    private final Header header = new Header();
+
+    @Nonnull
+    @Step("Open profile page")
     public ProfilePage goToProfilePage() {
-        menuBtn.click();
-        menuItems.find(text("Profile")).click();
-        return new ProfilePage();
+        return header.toProfilePage();
     }
 
-    public EditSpendingPage editSpending(String description) {
-        searchInput.val(description).sendKeys(Keys.ENTER);
-        tableRows.find(text(description)).$$("td").get(5).click();
-        return new EditSpendingPage();
-    }
-
-    public MainPage checkThatTableContains(String description) {
-        tableRows.find(text(description)).should(visible);
-        return this;
-    }
-
-    public MainPage checkMainPageIsLoaded() {
-        spendingTable.shouldBe(visible);
-        menuBtn.shouldBe(visible);
-        return this;
-    }
-
+    @Nonnull
+    @Step("Open people page")
     public AllPeoplePage goToAllPeoplePage() {
-        personIcon.click();
-        allPeopleLink.click();
-        return new AllPeoplePage();
+        return header.toAllPeoplesPage();
     }
 
+    @Nonnull
+    @Step("Open friends page")
     public FriendsPage goToFriendsPage() {
-        personIcon.click();
-        friendsLink.click();
-        return new FriendsPage();
+        return header.toFriendsPage();
+    }
+
+    @Nonnull
+    @Step("Add a new spending")
+    public EditSpendingPage addSpending() {
+        return header.addSpendingPage();
+    }
+
+    @Nonnull
+    @Step("Edit spending")
+    public EditSpendingPage editSpending(String description) {
+        return spendingTable.editSpending(description);
+    }
+
+    @Nonnull
+    @Step("Check that table contains '{description}'")
+    public MainPage checkThatTableContains(String description) {
+        spendingTable.checkTableContains(description);
+        return this;
+    }
+
+    @Nonnull
+    @Step("Check that page loaded")
+    public MainPage checkMainPageIsLoaded() {
+        statistics.shouldBe(visible);
+        return this;
     }
 }

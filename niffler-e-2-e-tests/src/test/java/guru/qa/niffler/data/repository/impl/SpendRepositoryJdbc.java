@@ -9,15 +9,19 @@ import guru.qa.niffler.data.entity.spend.CategoryEntity;
 import guru.qa.niffler.data.entity.spend.SpendEntity;
 import guru.qa.niffler.data.repository.SpendRepository;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class SpendRepositoryJdbc implements SpendRepository {
     private static final Config CFG = Config.getInstance();
     private static final SpendDao spendDao = new SpendDaoJdbc();
     private static final CategoryDao categoryDao = new CategoryDaoJdbc();
 
+    @Nonnull
     @Override
     public SpendEntity create(SpendEntity spend) {
         if (spend.getCategory() != null && spend.getCategory().getId() == null) {
@@ -27,11 +31,13 @@ public class SpendRepositoryJdbc implements SpendRepository {
         return spendDao.create(spend);
     }
 
+    @Nonnull
     @Override
     public SpendEntity update(SpendEntity spend) {
         return spendDao.update(spend);
     }
 
+    @Nonnull
     @Override
     public Optional<SpendEntity> findSpendById(UUID id) {
         return spendDao.findById(id).map(spendEntity -> {
@@ -40,6 +46,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
         });
     }
 
+    @Nonnull
     @Override
     public List<SpendEntity> findAllByUsername(String username) {
         List<SpendEntity> resultList = spendDao.findAllByUsername(username);
@@ -49,6 +56,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
         return resultList;
     }
 
+    @Nonnull
     @Override
     public List<SpendEntity> findAll() {
         return spendDao.findAll();
@@ -59,21 +67,25 @@ public class SpendRepositoryJdbc implements SpendRepository {
         spendDao.delete(spend);
     }
 
+    @Nonnull
     @Override
     public CategoryEntity createCategory(CategoryEntity category) {
         return categoryDao.create(category);
     }
 
+    @Nonnull
     @Override
     public CategoryEntity updateCategory(CategoryEntity category) {
         return categoryDao.update(category);
     }
 
+    @Nonnull
     @Override
     public Optional<CategoryEntity> findCategoryById(UUID id) {
         return categoryDao.findById(id);
     }
 
+    @Nonnull
     @Override
     public Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
         return categoryDao.findByUsernameAndCategoryName(username, categoryName);

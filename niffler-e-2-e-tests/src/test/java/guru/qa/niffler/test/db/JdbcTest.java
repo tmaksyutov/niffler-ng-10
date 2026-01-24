@@ -15,7 +15,7 @@ public class JdbcTest {
     static UsersDbClient usersDbClient = new UsersDbClient();
 
     @ValueSource(strings = {
-            "valentin-41"
+            "valentin-45"
     })
     @ParameterizedTest
     void jdbcTest(String uname) {

@@ -7,10 +7,12 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
+@ParametersAreNonnullByDefault
 public class UsersQueueExtension implements
         BeforeTestExecutionCallback,
         AfterTestExecutionCallback,

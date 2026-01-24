@@ -8,6 +8,7 @@ import guru.qa.niffler.jupiter.annotation.WebTest;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @WebTest
@@ -21,8 +22,8 @@ public class CategoryTest {
         loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
     }
 
-    @User(
-            categories = {@Category()})
+    @DisplayName("Активная категория должна отображаться в списке категорий")
+    @User(categories = {@Category()})
     @Test
     void activeCategoryShouldPresentInCategoryList(UserJson user) {
         loginPage
@@ -32,8 +33,8 @@ public class CategoryTest {
                 .checkCategoryIsDisplayed(user.testData().categories().getFirst().name());
     }
 
-    @User(
-            categories = {@Category(archived = true)})
+    @DisplayName("Архивная категория не должна отображаться в списке активных категорий")
+    @User(categories = {@Category(archived = true)})
     @Test
     void archivedCategoryShouldNotBePresentedInActiveCategoryList(UserJson user) {
         loginPage
@@ -43,8 +44,8 @@ public class CategoryTest {
                 .checkCategoryIsNotDisplayed(user.testData().categories().getFirst().name());
     }
 
-    @User(
-            categories = {@Category(archived = true)})
+    @DisplayName("Архивная категория должна отображаться в списке архивных категорий")
+    @User(categories = {@Category(archived = true)})
     @Test
     void archivedCategoryShouldBePresentedInArchivedList(UserJson user) {
         loginPage

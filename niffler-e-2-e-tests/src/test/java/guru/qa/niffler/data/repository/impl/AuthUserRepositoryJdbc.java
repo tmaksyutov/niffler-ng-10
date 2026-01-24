@@ -9,9 +9,12 @@ import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 import guru.qa.niffler.data.repository.AuthUserRepository;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class AuthUserRepositoryJdbc implements AuthUserRepository {
 
     private static final Config CFG = Config.getInstance();
@@ -19,20 +22,23 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
     private static final AuthUserDao authUserDao = new AuthUserDaoJdbc();
     private static final AuthAuthorityDao authorityDao = new AuthAuthorityDaoJdbc();
 
+    @Nonnull
     @Override
     public AuthUserEntity create(AuthUserEntity user) {
-            AuthUserEntity result = authUserDao.create(user);
-            for (AuthorityEntity authority : user.getAuthorities()) {
-                authorityDao.create(authority);
-            }
-            return result;
+        AuthUserEntity result = authUserDao.create(user);
+        for (AuthorityEntity authority : user.getAuthorities()) {
+            authorityDao.create(authority);
+        }
+        return result;
     }
 
+    @Nonnull
     @Override
     public AuthUserEntity update(AuthUserEntity user) {
         return authUserDao.update(user);
     }
 
+    @Nonnull
     @Override
     public Optional<AuthUserEntity> findById(UUID id) {
         return authUserDao.findById(id).map(userEntity -> {
@@ -41,6 +47,7 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
         });
     }
 
+    @Nonnull
     @Override
     public Optional<AuthUserEntity> findByUsername(String username) {
         return authUserDao.findByUsername(username).map(userEntity -> {
@@ -51,9 +58,9 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
 
     @Override
     public void delete(AuthUserEntity user) {
-            for (AuthorityEntity authority : user.getAuthorities()) {
-                authorityDao.delete(authority);
-            }
-            authUserDao.delete(user);
+        for (AuthorityEntity authority : user.getAuthorities()) {
+            authorityDao.delete(authority);
+        }
+        authUserDao.delete(user);
     }
 }

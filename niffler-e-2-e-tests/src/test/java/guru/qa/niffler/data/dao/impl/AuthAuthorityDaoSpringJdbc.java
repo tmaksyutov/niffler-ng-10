@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class AuthAuthorityDaoSpringJdbc implements AuthAuthorityDao {
 
     private static final Config CFG = Config.getInstance();
@@ -41,16 +44,19 @@ public class AuthAuthorityDaoSpringJdbc implements AuthAuthorityDao {
         );
     }
 
+    @Nonnull
     @Override
     public List<AuthorityEntity> findByUserId(UUID id) {
         throw new RuntimeException("Authorities for user with id " + id + " not found");
     }
 
+    @Nonnull
     @Override
     public Optional<AuthorityEntity> findById(UUID id) {
         throw new RuntimeException("AuthorityEntity with id " + id + " not found");
     }
 
+    @Nonnull
     @Override
     public List<AuthorityEntity> findAll() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));

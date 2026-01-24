@@ -10,15 +10,19 @@ import guru.qa.niffler.data.entity.user.FriendshipStatus;
 import guru.qa.niffler.data.entity.user.UserEntity;
 import guru.qa.niffler.data.repository.UserdataUserRepository;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository {
     private static final Config CFG = Config.getInstance();
 
     private static final UserDao userDao = new UserDaoSpringJdbc();
     private static final FriendshipDao friendshipDao = new FriendshipDaoSpringJdbc();
 
+    @Nonnull
     @Override
     public UserEntity create(UserEntity user) {
         UserEntity result = userDao.create(user);
@@ -31,11 +35,13 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
         return result;
     }
 
+    @Nonnull
     @Override
     public UserEntity update(UserEntity user) {
         return userDao.update(user);
     }
 
+    @Nonnull
     @Override
     public Optional<UserEntity> findById(UUID id) {
         return userDao.findById(id).map(userEntity -> {
@@ -45,7 +51,7 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
         });
     }
 
-
+    @Nonnull
     @Override
     public Optional<UserEntity> findByUsername(String username) {
         return userDao.findByUsername(username).map(userEntity -> {
@@ -63,7 +69,6 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
         friendship.setStatus(FriendshipStatus.PENDING);
         friendshipDao.createFriendship(friendship);
     }
-
 
     @Override
     public void addFriend(UserEntity requester, UserEntity addressee) {

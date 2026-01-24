@@ -6,6 +6,7 @@ import guru.qa.niffler.data.entity.user.UserEntity;
 import guru.qa.niffler.model.CurrencyValues;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@ParametersAreNonnullByDefault
 public class UserSetExtractor implements ResultSetExtractor<UserEntity> {
 
     public static UserSetExtractor instance = new UserSetExtractor();

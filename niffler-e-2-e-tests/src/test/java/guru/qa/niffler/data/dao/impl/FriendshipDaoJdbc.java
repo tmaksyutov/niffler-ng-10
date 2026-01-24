@@ -6,6 +6,8 @@ import guru.qa.niffler.data.entity.user.FriendshipEntity;
 import guru.qa.niffler.data.entity.user.FriendshipStatus;
 import guru.qa.niffler.data.entity.user.UserEntity;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +17,7 @@ import java.util.UUID;
 
 import static guru.qa.niffler.data.tpl.Connections.holder;
 
+@ParametersAreNonnullByDefault
 public class FriendshipDaoJdbc implements FriendshipDao {
     private static final Config CFG = Config.getInstance();
 
@@ -49,6 +52,7 @@ public class FriendshipDaoJdbc implements FriendshipDao {
         }
     }
 
+    @Nonnull
     @Override
     public List<FriendshipEntity> findByRequesterId(UUID requesterId) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
@@ -64,6 +68,7 @@ public class FriendshipDaoJdbc implements FriendshipDao {
         }
     }
 
+    @Nonnull
     @Override
     public List<FriendshipEntity> findByAddresseeId(UUID addresseeId) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
@@ -79,6 +84,7 @@ public class FriendshipDaoJdbc implements FriendshipDao {
         }
     }
 
+    @Nonnull
     private FriendshipEntity getFriendship(ResultSet rs) throws SQLException {
         FriendshipEntity friendship = new FriendshipEntity();
 
@@ -95,6 +101,7 @@ public class FriendshipDaoJdbc implements FriendshipDao {
         return friendship;
     }
 
+    @Nonnull
     private List<FriendshipEntity> getFriendships(ResultSet rs) throws SQLException {
         List<FriendshipEntity> friendshipEntities = new ArrayList<>();
         while (rs.next()) friendshipEntities.add(getFriendship(rs));

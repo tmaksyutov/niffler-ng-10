@@ -10,16 +10,19 @@ import guru.qa.niffler.data.entity.user.FriendshipStatus;
 import guru.qa.niffler.data.entity.user.UserEntity;
 import guru.qa.niffler.data.repository.UserdataUserRepository;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class UserdataUserRepositoryJdbc implements UserdataUserRepository {
     private static final Config CFG = Config.getInstance();
 
     private static final UserDao userDao = new UserDaoJdbc();
     private static final FriendshipDao friendshipDao = new FriendshipDaoJdbc();
 
-
+    @Nonnull
     @Override
     public UserEntity create(UserEntity user) {
         UserEntity result = userDao.create(user);
@@ -32,11 +35,13 @@ public class UserdataUserRepositoryJdbc implements UserdataUserRepository {
         return result;
     }
 
+    @Nonnull
     @Override
     public UserEntity update(UserEntity user) {
         return userDao.update(user);
     }
 
+    @Nonnull
     @Override
     public Optional<UserEntity> findById(UUID id) {
         return userDao.findById(id).map(userEntity -> {
@@ -46,6 +51,7 @@ public class UserdataUserRepositoryJdbc implements UserdataUserRepository {
         });
     }
 
+    @Nonnull
     @Override
     public Optional<UserEntity> findByUsername(String username) {
         return userDao.findByUsername(username).map(userEntity -> {
