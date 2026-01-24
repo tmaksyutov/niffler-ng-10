@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.page.*;
 import io.qameta.allure.Step;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.Condition.text;
@@ -13,8 +14,6 @@ import static com.codeborne.selenide.Selenide.$$;
 
 @ParametersAreNonnullByDefault
 public class Header extends BaseComponent<Header> {
-
-    private final SelenideElement self = $("#root header");
 
     private final SelenideElement newSpendingButton = self.find("[href='/spending']");
 
@@ -31,6 +30,7 @@ public class Header extends BaseComponent<Header> {
         self.$("h1").shouldHave(text("Niffler"));
     }
 
+    @Nonnull
     @Step("Navigate to friends page")
     public FriendsPage toFriendsPage() {
         profileMenuButton.click();
@@ -38,6 +38,7 @@ public class Header extends BaseComponent<Header> {
         return new FriendsPage();
     }
 
+    @Nonnull
     @Step("Navigate to all people page")
     public AllPeoplePage toAllPeoplesPage() {
         profileMenuButton.click();
@@ -45,6 +46,7 @@ public class Header extends BaseComponent<Header> {
         return new AllPeoplePage();
     }
 
+    @Nonnull
     @Step("Navigate to profile page")
     public ProfilePage toProfilePage() {
         profileMenuButton.click();
@@ -52,6 +54,7 @@ public class Header extends BaseComponent<Header> {
         return new ProfilePage();
     }
 
+    @Nonnull
     @Step("Sign out")
     public LoginPage signOut() {
         profileMenuButton.click();
@@ -59,12 +62,14 @@ public class Header extends BaseComponent<Header> {
         return new LoginPage();
     }
 
+    @Nonnull
     @Step("Open add spending page")
     public EditSpendingPage addSpendingPage() {
         newSpendingButton.click();
         return new EditSpendingPage();
     }
 
+    @Nonnull
     @Step("Navigate to main page")
     public MainPage toMainPage() {
         self.$("h1").click();

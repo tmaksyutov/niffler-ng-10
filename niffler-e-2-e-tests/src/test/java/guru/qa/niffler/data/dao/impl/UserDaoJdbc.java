@@ -6,6 +6,7 @@ import guru.qa.niffler.data.entity.user.UserEntity;
 import guru.qa.niffler.model.CurrencyValues;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +15,14 @@ import java.util.UUID;
 
 import static guru.qa.niffler.data.tpl.Connections.holder;
 
+@ParametersAreNonnullByDefault
 public class UserDaoJdbc implements UserDao {
 
     private static final Config CFG = Config.getInstance();
 
     @Nonnull
     @Override
-    public UserEntity create(@Nonnull UserEntity user) {
+    public UserEntity create(UserEntity user) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "INSERT INTO \"user\" (currency, firstname, full_name, photo, photo_small, surname, username) " +
                         "VALUES ( ?, ?, ?, ?, ?, ?, ?)",
@@ -53,7 +55,7 @@ public class UserDaoJdbc implements UserDao {
 
     @Nonnull
     @Override
-    public UserEntity update(@Nonnull UserEntity user) {
+    public UserEntity update(UserEntity user) {
         try (PreparedStatement usersPs = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "UPDATE \"user\" " +
                         "SET currency = ?, " +
@@ -77,7 +79,7 @@ public class UserDaoJdbc implements UserDao {
 
     @Nonnull
     @Override
-    public Optional<UserEntity> findById(@Nonnull UUID id) {
+    public Optional<UserEntity> findById(UUID id) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM \"user\" WHERE id = ?"
         )) {
@@ -97,7 +99,7 @@ public class UserDaoJdbc implements UserDao {
 
     @Nonnull
     @Override
-    public Optional<UserEntity> findByUsername(@Nonnull String username) {
+    public Optional<UserEntity> findByUsername(String username) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM \"user\" WHERE username = ?"
         )) {
@@ -116,7 +118,7 @@ public class UserDaoJdbc implements UserDao {
     }
 
     @Override
-    public void delete(@Nonnull UserEntity user) {
+    public void delete(UserEntity user) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
                 "DELETE FROM \"user\" WHERE id = ?"
         )) {
@@ -147,7 +149,7 @@ public class UserDaoJdbc implements UserDao {
     }
 
     @Nonnull
-    private UserEntity getUser(@Nonnull ResultSet rs) throws SQLException {
+    private UserEntity getUser(ResultSet rs) throws SQLException {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(rs.getObject("id", UUID.class));
         userEntity.setUsername(rs.getString("username"));

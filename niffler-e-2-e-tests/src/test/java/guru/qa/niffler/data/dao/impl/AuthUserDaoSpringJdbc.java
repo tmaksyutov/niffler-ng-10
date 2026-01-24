@@ -10,19 +10,21 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class AuthUserDaoSpringJdbc implements AuthUserDao {
 
     private static final Config CFG = Config.getInstance();
 
     @Nonnull
     @Override
-    public AuthUserEntity create(@Nonnull AuthUserEntity user) {
+    public AuthUserEntity create(AuthUserEntity user) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
@@ -47,13 +49,13 @@ public class AuthUserDaoSpringJdbc implements AuthUserDao {
 
     @Nonnull
     @Override
-    public AuthUserEntity update(@Nonnull AuthUserEntity user) {
+    public AuthUserEntity update(AuthUserEntity user) {
         throw new RuntimeException("Update operation not supported");
     }
 
     @Nonnull
     @Override
-    public Optional<AuthUserEntity> findById(@Nonnull UUID id) {
+    public Optional<AuthUserEntity> findById(UUID id) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
         return Optional.ofNullable(
                 jdbcTemplate.queryForObject(
@@ -66,7 +68,7 @@ public class AuthUserDaoSpringJdbc implements AuthUserDao {
 
     @Nonnull
     @Override
-    public Optional<AuthUserEntity> findByUsername(@Nonnull String username) {
+    public Optional<AuthUserEntity> findByUsername(String username) {
         throw new RuntimeException("User with username '" + username + "' not found");
     }
 
@@ -81,7 +83,7 @@ public class AuthUserDaoSpringJdbc implements AuthUserDao {
     }
 
     @Override
-    public void delete(@Nonnull AuthUserEntity user) {
+    public void delete(AuthUserEntity user) {
         throw new UnsupportedOperationException();
     }
 }

@@ -1,9 +1,7 @@
 package guru.qa.niffler.config;
 
 import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
 enum LocalConfig implements Config {
     INSTANCE;
 

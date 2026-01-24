@@ -23,7 +23,7 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
 
     @Nonnull
     @Override
-    public SpendEntity create(@Nonnull SpendEntity spend) {
+    public SpendEntity create(SpendEntity spend) {
         if (spend.getCategory() != null && spend.getCategory().getId() == null) {
             CategoryEntity createdCategory = categoryDao.create(spend.getCategory());
             spend.getCategory().setId(createdCategory.getId());
@@ -33,13 +33,13 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
 
     @Nonnull
     @Override
-    public SpendEntity update(@Nonnull SpendEntity spend) {
+    public SpendEntity update(SpendEntity spend) {
         return spendDao.update(spend);
     }
 
     @Nonnull
     @Override
-    public Optional<SpendEntity> findSpendById(@Nonnull UUID id) {
+    public Optional<SpendEntity> findSpendById(UUID id) {
         return spendDao.findById(id).map(spendEntity -> {
             spendEntity.setCategory(categoryDao.findById(spendEntity.getCategory().getId()).get());
             return spendEntity;
@@ -48,7 +48,7 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
 
     @Nonnull
     @Override
-    public List<SpendEntity> findAllByUsername(@Nonnull String username) {
+    public List<SpendEntity> findAllByUsername(String username) {
         List<SpendEntity> resultList = spendDao.findAllByUsername(username);
         for (SpendEntity spend : resultList) {
             spend.setCategory(categoryDao.findById(spend.getCategory().getId()).get());
@@ -63,39 +63,36 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
     }
 
     @Override
-    public void deleteSpend(@Nonnull SpendEntity spend) {
+    public void deleteSpend(SpendEntity spend) {
         spendDao.delete(spend);
     }
 
     @Nonnull
     @Override
-    public CategoryEntity createCategory(@Nonnull CategoryEntity category) {
+    public CategoryEntity createCategory(CategoryEntity category) {
         return categoryDao.create(category);
     }
 
     @Nonnull
     @Override
-    public CategoryEntity updateCategory(@Nonnull CategoryEntity category) {
+    public CategoryEntity updateCategory(CategoryEntity category) {
         return categoryDao.update(category);
     }
 
     @Nonnull
     @Override
-    public Optional<CategoryEntity> findCategoryById(@Nonnull UUID id) {
+    public Optional<CategoryEntity> findCategoryById(UUID id) {
         return categoryDao.findById(id);
     }
 
     @Nonnull
     @Override
-    public Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(
-            @Nonnull String username,
-            @Nonnull String categoryName
-    ) {
+    public Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
         return categoryDao.findByUsernameAndCategoryName(username, categoryName);
     }
 
     @Override
-    public void deleteCategory(@Nonnull CategoryEntity category) {
+    public void deleteCategory(CategoryEntity category) {
         categoryDao.delete(category);
     }
 }

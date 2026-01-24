@@ -16,7 +16,7 @@ public class Connections {
     private static final Map<String, JdbcConnectionHolder> holders = new ConcurrentHashMap<>();
 
     @Nonnull
-    public static JdbcConnectionHolder holder(@Nonnull String jdbcUrl) {
+    public static JdbcConnectionHolder holder(String jdbcUrl) {
         return holders.computeIfAbsent(
                 jdbcUrl,
                 key -> new JdbcConnectionHolder(
@@ -26,7 +26,7 @@ public class Connections {
     }
 
     @Nonnull
-    public static JdbcConnectionHolders holders(@Nonnull String... jdbcUrl) {
+    public static JdbcConnectionHolders holders(String... jdbcUrl) {
         List<JdbcConnectionHolder> holders = new ArrayList<>();
         for (String url : jdbcUrl) {
             holders.add(holder(url));

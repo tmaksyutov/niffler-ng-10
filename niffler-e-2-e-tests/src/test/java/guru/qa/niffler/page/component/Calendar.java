@@ -4,6 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -18,8 +19,6 @@ import static com.codeborne.selenide.Selenide.$;
 
 @ParametersAreNonnullByDefault
 public class Calendar extends BaseComponent<Calendar> {
-
-    private final SelenideElement self = $(".MuiInputBase-adornedEnd");
 
     private final SelenideElement calendarButton = self.find("button");
 
@@ -45,6 +44,7 @@ public class Calendar extends BaseComponent<Calendar> {
         super($(".MuiInputBase-adornedEnd"));
     }
 
+    @Nonnull
     @Step("Select date '{date}' in calendar")
     public Calendar selectDateInCalendar(Date date) {
         calendarButton.click();

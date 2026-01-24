@@ -7,6 +7,7 @@ import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +16,14 @@ import java.util.UUID;
 
 import static guru.qa.niffler.data.tpl.Connections.holder;
 
+@ParametersAreNonnullByDefault
 public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
 
     private static final Config CFG = Config.getInstance();
 
+
     @Override
-    public void create(@Nonnull AuthorityEntity... authorities) {
+    public void create(AuthorityEntity... authorities) {
         try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
                 "INSERT INTO authority (user_id, authority) VALUES (?, ?)"
         )) {
@@ -38,7 +41,7 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
 
     @Nonnull
     @Override
-    public List<AuthorityEntity> findByUserId(@Nonnull UUID id) {
+    public List<AuthorityEntity> findByUserId(UUID id) {
         List<AuthorityEntity> authorities = new ArrayList<>();
         try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM authority WHERE user_id = ?"
@@ -58,7 +61,7 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
 
     @Nonnull
     @Override
-    public Optional<AuthorityEntity> findById(@Nonnull UUID id) {
+    public Optional<AuthorityEntity> findById(UUID id) {
         try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM authority WHERE id = ?"
         )) {
@@ -96,7 +99,7 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
     }
 
     @Override
-    public void delete(@Nonnull AuthorityEntity authority) {
+    public void delete(AuthorityEntity authority) {
         try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
                 "DELETE FROM authority WHERE id = ?"
         )) {
@@ -108,7 +111,7 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
     }
 
     @Nonnull
-    private AuthorityEntity getAuthority(@Nonnull ResultSet rs) throws SQLException {
+    private AuthorityEntity getAuthority(ResultSet rs) throws SQLException {
         AuthorityEntity authority = new AuthorityEntity();
         authority.setId(rs.getObject("id", UUID.class));
         authority.setAuthority(rs.getObject("authority", Authority.class));

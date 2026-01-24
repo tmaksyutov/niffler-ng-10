@@ -24,7 +24,7 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
 
     @Nonnull
     @Override
-    public UserEntity create(@Nonnull UserEntity user) {
+    public UserEntity create(UserEntity user) {
         UserEntity result = userDao.create(user);
         for (FriendshipEntity friendship : user.getFriendshipAddressees()) {
             friendshipDao.createFriendship(friendship);
@@ -37,13 +37,13 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
 
     @Nonnull
     @Override
-    public UserEntity update(@Nonnull UserEntity user) {
+    public UserEntity update(UserEntity user) {
         return userDao.update(user);
     }
 
     @Nonnull
     @Override
-    public Optional<UserEntity> findById(@Nonnull UUID id) {
+    public Optional<UserEntity> findById(UUID id) {
         return userDao.findById(id).map(userEntity -> {
             userEntity.setFriendshipAddressees(friendshipDao.findByAddresseeId(id));
             userEntity.setFriendshipRequests(friendshipDao.findByRequesterId(id));
@@ -53,7 +53,7 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
 
     @Nonnull
     @Override
-    public Optional<UserEntity> findByUsername(@Nonnull String username) {
+    public Optional<UserEntity> findByUsername(String username) {
         return userDao.findByUsername(username).map(userEntity -> {
             userEntity.setFriendshipAddressees(friendshipDao.findByAddresseeId(userEntity.getId()));
             userEntity.setFriendshipRequests(friendshipDao.findByRequesterId(userEntity.getId()));
@@ -62,10 +62,7 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
     }
 
     @Override
-    public void addFriendshipRequest(
-            @Nonnull UserEntity requester,
-            @Nonnull UserEntity addressee
-    ) {
+    public void addFriendshipRequest(UserEntity requester, UserEntity addressee) {
         FriendshipEntity friendship = new FriendshipEntity();
         friendship.setAddressee(addressee);
         friendship.setRequester(requester);
@@ -74,10 +71,7 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
     }
 
     @Override
-    public void addFriend(
-            @Nonnull UserEntity requester,
-            @Nonnull UserEntity addressee
-    ) {
+    public void addFriend(UserEntity requester, UserEntity addressee) {
         FriendshipEntity friendshipIncome = new FriendshipEntity();
         friendshipIncome.setAddressee(addressee);
         friendshipIncome.setRequester(requester);
@@ -93,7 +87,7 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
     }
 
     @Override
-    public void delete(@Nonnull UserEntity user) {
+    public void delete(UserEntity user) {
         for (FriendshipEntity friendship : user.getFriendshipAddressees()) {
             friendshipDao.deleteFriendship(friendship);
         }

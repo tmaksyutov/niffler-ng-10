@@ -13,6 +13,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +31,7 @@ public final class SpendApiClient extends RestClient implements SpendClient {
     @Nonnull
     @Step("Create spend")
     @Override
-    public SpendJson createSpend(@Nonnull SpendJson spend) {
+    public SpendJson createSpend(SpendJson spend) {
         final Response<SpendJson> response;
         try {
             response = spendApi.createSpend(spend).execute();
@@ -38,13 +39,13 @@ public final class SpendApiClient extends RestClient implements SpendClient {
             throw new AssertionError(e);
         }
         assertEquals(201, response.code());
-        return response.body();
+        return Objects.requireNonNull(response.body());
     }
 
     @Nonnull
     @Step("Create category")
     @Override
-    public CategoryJson createCategory(@Nonnull CategoryJson category) {
+    public CategoryJson createCategory(CategoryJson category) {
         final Response<CategoryJson> response;
         try {
             response = spendApi.addCategory(category).execute();
@@ -58,7 +59,7 @@ public final class SpendApiClient extends RestClient implements SpendClient {
     @Nonnull
     @Step("Find category by name '{categoryName}' for user '{username}'")
     @Override
-    public Optional<CategoryJson> findCategoryByNameAndUsername(@Nonnull String categoryName, @Nonnull String username) {
+    public Optional<CategoryJson> findCategoryByNameAndUsername(String categoryName,String username) {
         final Response<List<CategoryJson>> response;
         try {
             response = spendApi.getAllCategories(username, false).execute();
@@ -75,7 +76,7 @@ public final class SpendApiClient extends RestClient implements SpendClient {
 
     @Nullable
     @Step("Find spend by username '{username}' and ID '{id}'")
-    public SpendJson findSpendByUsernameAndId(@Nonnull String username, @Nonnull String id) {
+    public SpendJson findSpendByUsernameAndId(String username, String id) {
         final Response<SpendJson> response;
         try {
             response = spendApi.getSpendById(username, id).execute();
@@ -105,7 +106,7 @@ public final class SpendApiClient extends RestClient implements SpendClient {
 
     @Nonnull
     @Step("Edit spend with ID '{spend.id}'")
-    public SpendJson editSpend(@Nonnull SpendJson spend) {
+    public SpendJson editSpend(SpendJson spend) {
         final Response<SpendJson> response;
         try {
             response = spendApi.editSpend(spend).execute();
@@ -117,7 +118,7 @@ public final class SpendApiClient extends RestClient implements SpendClient {
     }
 
     @Step("Delete spends for user '{username}' with IDs: {ids}")
-    public void deleteSpend(@Nonnull String username, @Nonnull List<String> ids) {
+    public void deleteSpend(String username, List<String> ids) {
         final Response<Void> response;
         try {
             response = spendApi.deleteSpend(username, ids).execute();
@@ -129,7 +130,7 @@ public final class SpendApiClient extends RestClient implements SpendClient {
 
     @Nonnull
     @Step("Update category '{category.name}'")
-    public CategoryJson updateCategory(@Nonnull CategoryJson category) {
+    public CategoryJson updateCategory(CategoryJson category) {
         final Response<CategoryJson> response;
         try {
             response = spendApi.updateCategory(category).execute();

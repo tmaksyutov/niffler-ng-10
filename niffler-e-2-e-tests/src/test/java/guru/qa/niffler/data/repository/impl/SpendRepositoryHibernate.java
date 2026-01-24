@@ -23,7 +23,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
 
     @Nonnull
     @Override
-    public SpendEntity create(@Nonnull SpendEntity spend) {
+    public SpendEntity create(SpendEntity spend) {
         entityManager.joinTransaction();
         entityManager.persist(spend);
         return spend;
@@ -31,7 +31,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
 
     @Nonnull
     @Override
-    public SpendEntity update(@Nonnull SpendEntity spend) {
+    public SpendEntity update(SpendEntity spend) {
         entityManager.joinTransaction();
         entityManager.merge(spend);
         return spend;
@@ -39,13 +39,13 @@ public class SpendRepositoryHibernate implements SpendRepository {
 
     @Nonnull
     @Override
-    public Optional<SpendEntity> findSpendById(@Nonnull UUID id) {
+    public Optional<SpendEntity> findSpendById(UUID id) {
         return Optional.ofNullable(entityManager.find(SpendEntity.class, id));
     }
 
     @Nonnull
     @Override
-    public List<SpendEntity> findAllByUsername(@Nonnull String username) {
+    public List<SpendEntity> findAllByUsername(String username) {
         return entityManager.createQuery("SELECT s FROM SpendEntity s WHERE s.username = :username", SpendEntity.class)
                 .setParameter("username", username)
                 .getResultList();
@@ -59,7 +59,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
     }
 
     @Override
-    public void deleteSpend(@Nonnull SpendEntity spend) {
+    public void deleteSpend(SpendEntity spend) {
         entityManager.joinTransaction();
         if (!entityManager.contains(spend)) {
             spend = entityManager.merge(spend);
@@ -69,7 +69,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
 
     @Nonnull
     @Override
-    public CategoryEntity createCategory(@Nonnull CategoryEntity category) {
+    public CategoryEntity createCategory(CategoryEntity category) {
         entityManager.joinTransaction();
         entityManager.persist(category);
         return category;
@@ -77,7 +77,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
 
     @Nonnull
     @Override
-    public CategoryEntity updateCategory(@Nonnull CategoryEntity category) {
+    public CategoryEntity updateCategory(CategoryEntity category) {
         entityManager.joinTransaction();
         entityManager.merge(category);
         return category;
@@ -85,16 +85,13 @@ public class SpendRepositoryHibernate implements SpendRepository {
 
     @Nonnull
     @Override
-    public Optional<CategoryEntity> findCategoryById(@Nonnull UUID id) {
+    public Optional<CategoryEntity> findCategoryById(UUID id) {
         return Optional.ofNullable(entityManager.find(CategoryEntity.class, id));
     }
 
     @Nonnull
     @Override
-    public Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(
-            @Nonnull String username,
-            @Nonnull String categoryName
-    ) {
+    public Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
         try {
             return Optional.ofNullable(entityManager.createQuery("SELECT c FROM CategoryEntity c WHERE c.username = :username AND c.name  = :name", CategoryEntity.class)
                     .setParameter("username", username)
@@ -107,7 +104,7 @@ public class SpendRepositoryHibernate implements SpendRepository {
     }
 
     @Override
-    public void deleteCategory(@Nonnull CategoryEntity category) {
+    public void deleteCategory(CategoryEntity category) {
         entityManager.joinTransaction();
         if (!entityManager.contains(category)) {
             category = entityManager.merge(category);

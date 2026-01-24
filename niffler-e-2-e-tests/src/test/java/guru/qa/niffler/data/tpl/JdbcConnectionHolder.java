@@ -15,7 +15,7 @@ public class JdbcConnectionHolder implements AutoCloseable {
     private final DataSource dataSource;
     private final Map<Long, Connection> connection = new ConcurrentHashMap<Long, Connection>();
 
-    public JdbcConnectionHolder(@Nonnull DataSource dataSource) {
+    public JdbcConnectionHolder(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

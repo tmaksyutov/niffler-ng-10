@@ -7,6 +7,7 @@ import guru.qa.niffler.page.EditSpendingPage;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -15,8 +16,6 @@ import static com.codeborne.selenide.Selenide.$;
 
 @ParametersAreNonnullByDefault
 public class SpendingTable extends BaseComponent<SpendingTable> {
-
-    private final SelenideElement self = $("#spendings");
 
     private final SearchField searchField = new SearchField();
 
@@ -36,6 +35,7 @@ public class SpendingTable extends BaseComponent<SpendingTable> {
         super($("#spendings"));
     }
 
+    @Nonnull
     @Step("Select period")
     public SpendingTable selectPeriod(DataFilterValues period) {
         periodInput.click();
@@ -43,6 +43,7 @@ public class SpendingTable extends BaseComponent<SpendingTable> {
         return this;
     }
 
+    @Nonnull
     @Step("Edit spending '{description}'")
     public EditSpendingPage editSpending(String description) {
         searchSpendingByDescription(description);
@@ -50,6 +51,7 @@ public class SpendingTable extends BaseComponent<SpendingTable> {
         return new EditSpendingPage();
     }
 
+    @Nonnull
     @Step("Delete spending '{description}'")
     public SpendingTable deleteSpending(String description) {
         searchSpendingByDescription(description);
@@ -58,12 +60,14 @@ public class SpendingTable extends BaseComponent<SpendingTable> {
         return this;
     }
 
+    @Nonnull
     @Step("Search spending '{description}'")
     public SpendingTable searchSpendingByDescription(String description) {
         searchField.search(description);
         return this;
     }
 
+    @Nonnull
     @Step("Check table contains spends")
     public SpendingTable checkTableContains(String... expectedSpends) {
         for (String spend : expectedSpends) {
@@ -74,6 +78,7 @@ public class SpendingTable extends BaseComponent<SpendingTable> {
         return this;
     }
 
+    @Nonnull
     @Step("Check table size is {expectedSize}")
     public SpendingTable checkTableSize(int expectedSize) {
         spendingRows.shouldHave(size(expectedSize));

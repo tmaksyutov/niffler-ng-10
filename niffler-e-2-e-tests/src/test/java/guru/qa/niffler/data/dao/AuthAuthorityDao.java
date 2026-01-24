@@ -14,13 +14,13 @@ public interface AuthAuthorityDao {
     void create(AuthorityEntity... authorities);
 
     @Nonnull
-    List<AuthorityEntity> findByUserId(@Nonnull UUID id);
+    List<AuthorityEntity> findByUserId(UUID id);
 
     @Nonnull
-    Optional<AuthorityEntity> findById(@Nonnull UUID id);
+    Optional<AuthorityEntity> findById(UUID id);
 
     @Nonnull
     List<AuthorityEntity> findAll();
 
-    void delete(@Nonnull AuthorityEntity authority);
+    void delete(AuthorityEntity authority);
 }

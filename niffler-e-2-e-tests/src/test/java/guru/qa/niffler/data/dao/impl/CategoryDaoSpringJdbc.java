@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,13 +18,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class CategoryDaoSpringJdbc implements CategoryDao {
 
     private static final Config CFG = Config.getInstance();
 
     @Nonnull
     @Override
-    public CategoryEntity create(@Nonnull CategoryEntity category) {
+    public CategoryEntity create(CategoryEntity category) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
@@ -45,7 +47,7 @@ public class CategoryDaoSpringJdbc implements CategoryDao {
 
     @Nonnull
     @Override
-    public Optional<CategoryEntity> findById(@Nonnull UUID id) {
+    public Optional<CategoryEntity> findById(UUID id) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
         return Optional.ofNullable(
                 jdbcTemplate.queryForObject(
@@ -58,7 +60,7 @@ public class CategoryDaoSpringJdbc implements CategoryDao {
 
     @Nonnull
     @Override
-    public CategoryEntity update(@Nonnull CategoryEntity categoryEntity) {
+    public CategoryEntity update(CategoryEntity categoryEntity) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
         KeyHolder kh = new GeneratedKeyHolder();
         try {
@@ -81,10 +83,7 @@ public class CategoryDaoSpringJdbc implements CategoryDao {
 
     @Nonnull
     @Override
-    public Optional<CategoryEntity> findByUsernameAndCategoryName(
-            @Nonnull String username,
-            @Nonnull String categoryName
-    ) {
+    public Optional<CategoryEntity> findByUsernameAndCategoryName(String username, String categoryName) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
         return Optional.ofNullable(
                 jdbcTemplate.queryForObject(
@@ -99,7 +98,7 @@ public class CategoryDaoSpringJdbc implements CategoryDao {
 
     @Nonnull
     @Override
-    public List<CategoryEntity> findAllByUsername(@Nonnull String username) {
+    public List<CategoryEntity> findAllByUsername(String username) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
         return jdbcTemplate.query(
                 "SELECT * FROM category WHERE username = ?",
@@ -119,7 +118,7 @@ public class CategoryDaoSpringJdbc implements CategoryDao {
     }
 
     @Override
-    public void delete(@Nonnull CategoryEntity category) {
+    public void delete(CategoryEntity category) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
         jdbcTemplate.update(
                 "DELETE FROM category WHERE id = ?",

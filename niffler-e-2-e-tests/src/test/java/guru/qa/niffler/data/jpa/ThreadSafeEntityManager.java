@@ -16,7 +16,7 @@ public class ThreadSafeEntityManager implements EntityManager {
     private final EntityManagerFactory emf;
 
 
-    public ThreadSafeEntityManager(@Nonnull EntityManager delegate) {
+    public ThreadSafeEntityManager(EntityManager delegate) {
 
         threadEm.set(delegate);
         emf = delegate.getEntityManagerFactory();

@@ -21,7 +21,7 @@ public final class AuthApiClient extends RestClient {
 
     @Nonnull
     @Step("Register user '{username}'")
-    public Response<Void> register(@Nonnull String username, String password) throws IOException {
+    public Response<Void> register(String username, String password) throws IOException {
         authApi.requestRegisterForm().execute();
         return authApi.register(
                 username,

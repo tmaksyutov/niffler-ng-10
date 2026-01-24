@@ -24,7 +24,7 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
 
     @Nonnull
     @Override
-    public AuthUserEntity create(@Nonnull AuthUserEntity user) {
+    public AuthUserEntity create(AuthUserEntity user) {
         AuthUserEntity result = authUserDao.create(user);
         for (AuthorityEntity authority : user.getAuthorities()) {
             authorityDao.create(authority);
@@ -34,13 +34,13 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
 
     @Nonnull
     @Override
-    public AuthUserEntity update(@Nonnull AuthUserEntity user) {
+    public AuthUserEntity update(AuthUserEntity user) {
         return authUserDao.update(user);
     }
 
     @Nonnull
     @Override
-    public Optional<AuthUserEntity> findById(@Nonnull UUID id) {
+    public Optional<AuthUserEntity> findById(UUID id) {
         return authUserDao.findById(id).map(userEntity -> {
             userEntity.setAuthorities(authorityDao.findByUserId((id)));
             return userEntity;
@@ -49,7 +49,7 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
 
     @Nonnull
     @Override
-    public Optional<AuthUserEntity> findByUsername(@Nonnull String username) {
+    public Optional<AuthUserEntity> findByUsername(String username) {
         return authUserDao.findByUsername(username).map(userEntity -> {
             userEntity.setAuthorities(authorityDao.findByUserId((userEntity.getId())));
             return userEntity;
@@ -57,7 +57,7 @@ public class AuthUserRepositoryJdbc implements AuthUserRepository {
     }
 
     @Override
-    public void delete(@Nonnull AuthUserEntity user) {
+    public void delete(AuthUserEntity user) {
         for (AuthorityEntity authority : user.getAuthorities()) {
             authorityDao.delete(authority);
         }

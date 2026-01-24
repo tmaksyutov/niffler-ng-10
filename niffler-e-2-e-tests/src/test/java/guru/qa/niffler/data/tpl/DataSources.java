@@ -20,7 +20,7 @@ public class DataSources {
     private static final Map<String, DataSource> dataSources = new ConcurrentHashMap<>();
 
     @Nonnull
-    public static DataSource dataSource(@Nonnull String jdbcUrl) {
+    public static DataSource dataSource(String jdbcUrl) {
         return dataSources.computeIfAbsent(
                 jdbcUrl,
                 key -> {
