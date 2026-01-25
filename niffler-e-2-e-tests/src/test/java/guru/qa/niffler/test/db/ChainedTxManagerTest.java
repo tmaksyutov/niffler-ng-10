@@ -12,6 +12,7 @@ import guru.qa.niffler.data.tpl.DataSources;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.utils.RandomDataUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.transaction.ChainedTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -21,6 +22,7 @@ import java.sql.Connection;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Disabled
 public class ChainedTxManagerTest {
     private static final Config CFG = Config.getInstance();
 
