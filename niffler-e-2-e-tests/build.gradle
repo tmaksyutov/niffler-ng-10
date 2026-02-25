@@ -11,7 +11,7 @@ buildscript {
         springJdbcVersion = '6.2.11'
         springCryptoVersion = '6.5.5'
         p6spyVersion = '3.9.1'
-        hibernateVersion = '7.1.1.Final'
+        hibernateVersion = '7.0.0.Final'
         kafkaClientsVersion = '4.1.0'
         saajVersion = '3.0.4'
         springDataCommonsVersion = '3.5.4'
@@ -142,4 +142,15 @@ tasks.register('printVersion') {
     doLast {
         println project.version
     }
+}
+
+test {
+    options {
+        systemProperties(System.getProperties())
+    }
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+    useJUnitPlatform()
 }

@@ -13,7 +13,7 @@ import static guru.qa.niffler.utils.RandomDataUtils.randomPassword;
 import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
 
 @ExtendWith(BrowserExtension.class)
-public class RegistrationTest {
+public class LoginTest {
 
     private static final Config CFG = Config.getInstance();
     private LoginPage loginPage;
